@@ -39,18 +39,21 @@ notify.loading('Saving changes...')
 ## Why This Library Exists
 
 Most web applications implement feedback using a combination of:
+
 - ad-hoc `aria-live` regions
 - visual toast libraries
 - manual focus hacks
 - inconsistent timing and dismissal rules
 
 This leads to:
+
 - duplicate or missing screen reader announcements
 - focus being stolen incorrectly
 - over-announcement and cognitive overload
 - WCAG violations introduced unintentionally
 
 `a11y-feedback` provides a **centralized, opinionated, accessibility-first feedback layer** that is:
+
 - safe by default
 - hard to misuse
 - predictable across screen readers
@@ -73,12 +76,7 @@ This leads to:
 ### Main Functions
 
 ```typescript
-import {
-  notify,
-  configureFeedback,
-  enableFeedbackDebug,
-  getFeedbackLog
-} from 'a11y-feedback'
+import { notify, configureFeedback, enableFeedbackDebug, getFeedbackLog } from 'a11y-feedback'
 ```
 
 ### notify
@@ -107,22 +105,22 @@ notify.loading(message, options?)
 interface FeedbackOptions {
   // Unique identifier for deduplication/replacement
   id?: string
-  
+
   // CSS selector for focus target (error/warning only)
   focus?: string
-  
+
   // Announce focus movement to screen readers
   explainFocus?: boolean
-  
+
   // Force re-announcement of identical messages
   force?: boolean
-  
+
   // Auto-dismiss timeout in ms (not for errors)
   timeout?: number
-  
+
   // Custom CSS class for visual feedback
   className?: string
-  
+
   // Callback when dismissed
   onDismiss?: () => void
 }
@@ -136,30 +134,30 @@ Configure global settings:
 configureFeedback({
   // Enable visual feedback rendering
   visual: true,
-  
+
   // Default auto-dismiss timeout (ms)
   defaultTimeout: 5000,
-  
+
   // Visual feedback position
   visualPosition: 'top-right',
-  
+
   // Max visual items shown
   maxVisualItems: 5,
-  
+
   // Enable debug logging
-  debug: false
+  debug: false,
 })
 ```
 
 ## Feedback Types & Semantics
 
-| Type     | ARIA Role | aria-live   | Priority | Can Move Focus |
-|----------|-----------|-------------|----------|----------------|
-| success  | status    | polite      | low      | No             |
-| info     | status    | polite      | low      | No             |
-| loading  | status    | polite      | low      | No             |
-| warning  | alert     | assertive   | high     | Yes            |
-| error    | alert     | assertive   | high     | Yes            |
+| Type    | ARIA Role | aria-live | Priority | Can Move Focus |
+| ------- | --------- | --------- | -------- | -------------- |
+| success | status    | polite    | low      | No             |
+| info    | status    | polite    | low      | No             |
+| loading | status    | polite    | low      | No             |
+| warning | alert     | assertive | high     | Yes            |
+| error   | alert     | assertive | high     | Yes            |
 
 These mappings are **non-configurable** to prevent misuse.
 
@@ -171,20 +169,21 @@ These mappings are **non-configurable** to prevent misuse.
 notify.success('Profile updated successfully')
 ```
 
-Screen reader: *"Profile updated successfully."*
+Screen reader: _"Profile updated successfully."_
 
 ### Error With Focus Management
 
 ```typescript
 notify.error('Invalid email address', {
   focus: '#email',
-  explainFocus: true
+  explainFocus: true,
 })
 ```
 
-Screen reader: *"Invalid email address. Focus moved to Email field."*
+Screen reader: _"Invalid email address. Focus moved to Email field."_
 
 Rules enforced:
+
 - Errors may move focus
 - Success never steals focus
 - Loading never traps focus
@@ -200,6 +199,7 @@ notify.success('Profile saved', { id: 'profile-status' })
 ```
 
 Result:
+
 - Loading announcement is replaced
 - No duplicate or overlapping announcements
 - Visual and SR feedback stay in sync
@@ -230,6 +230,7 @@ configureFeedback({ visual: true })
 ```
 
 Visual behavior:
+
 - Minimal, accessible HTML output
 - Respects `prefers-reduced-motion`
 - Dismissible with keyboard
@@ -286,14 +287,14 @@ Screen readers may ignore repeated identical text. `a11y-feedback` guarantees an
 
 ## Focus Safety Rules (Enforced)
 
-| Rule | Enforced |
-|------|----------|
-| Success must not move focus | ✓ |
-| Info must not move focus | ✓ |
-| Loading must not move focus | ✓ |
-| Warning may move focus | ✓ |
-| Error may move focus | ✓ |
-| Focus movement can be announced | ✓ |
+| Rule                            | Enforced |
+| ------------------------------- | -------- |
+| Success must not move focus     | ✓        |
+| Info must not move focus        | ✓        |
+| Loading must not move focus     | ✓        |
+| Warning may move focus          | ✓        |
+| Error may move focus            | ✓        |
+| Focus movement can be announced | ✓        |
 
 Attempting to move focus on `success`, `info`, or `loading` will be silently ignored and logged in debug mode.
 
@@ -314,7 +315,7 @@ import type {
   FeedbackOptions,
   FeedbackEvent,
   FeedbackConfig,
-  FeedbackLogEntry
+  FeedbackLogEntry,
 } from 'a11y-feedback'
 ```
 
@@ -344,4 +345,3 @@ Requires ES2020 support. For older browsers, use a transpiler.
 ## License
 
 MIT
-

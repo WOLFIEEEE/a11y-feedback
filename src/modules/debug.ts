@@ -111,27 +111,22 @@ function logToConsole(entry: FeedbackLogEntry): void {
 
   const styles = getConsoleStyles(event.type)
 
-  console.warn(
-    `%c[a11y-feedback]%c ${action.toUpperCase()}`,
-    styles.badge,
-    styles.action,
-    {
-      message: event.message,
-      type: event.type,
-      id: event.id,
-      role: event.role,
-      ariaLive: event.ariaLive,
-      priority: event.priority,
-      region,
-      focusMoved,
-      focusTarget,
-      focusBlocked,
-      visualShown,
-      timestamp: new Date(event.timestamp).toISOString(),
-      deduped: event.deduped,
-      replaced: event.replaced,
-    }
-  )
+  console.warn(`%c[a11y-feedback]%c ${action.toUpperCase()}`, styles.badge, styles.action, {
+    message: event.message,
+    type: event.type,
+    id: event.id,
+    role: event.role,
+    ariaLive: event.ariaLive,
+    priority: event.priority,
+    region,
+    focusMoved,
+    focusTarget,
+    focusBlocked,
+    visualShown,
+    timestamp: new Date(event.timestamp).toISOString(),
+    deduped: event.deduped,
+    replaced: event.replaced,
+  })
 }
 
 /**
@@ -263,4 +258,3 @@ export function exportFeedbackLog(): string {
 export function resetDebug(): void {
   clearFeedbackLog()
 }
-

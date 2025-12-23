@@ -38,4 +38,3 @@ afterEach(() => {
   // Clean up after each test
   document.body.innerHTML = ''
 })
-

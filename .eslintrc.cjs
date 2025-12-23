@@ -40,4 +40,3 @@ module.exports = {
   },
   ignorePatterns: ['dist', 'node_modules', '*.cjs', '*.config.ts'],
 }
-

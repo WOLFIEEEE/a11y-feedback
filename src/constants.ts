@@ -158,4 +158,3 @@ export const POSITION_STYLES: Record<FeedbackConfig['visualPosition'], string> =
   'top-center': 'top: 1rem; left: 50%; transform: translateX(-50%);',
   'bottom-center': 'bottom: 1rem; left: 50%; transform: translateX(-50%);',
 } as const
-

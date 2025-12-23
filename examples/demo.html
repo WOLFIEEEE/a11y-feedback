@@ -1,276 +1,300 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>a11y-feedback Demo</title>
-  <style>
-    :root {
-      --bg: #0f172a;
-      --text: #e2e8f0;
-      --primary: #3b82f6;
-      --success: #10b981;
-      --error: #ef4444;
-      --warning: #f59e0b;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>a11y-feedback Demo</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --text: #e2e8f0;
+        --primary: #3b82f6;
+        --success: #10b981;
+        --error: #ef4444;
+        --warning: #f59e0b;
+      }
 
-    * {
-      box-sizing: border-box;
-    }
+      * {
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 2rem;
-      min-height: 100vh;
-    }
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 2rem;
+        min-height: 100vh;
+      }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
 
-    .subtitle {
-      color: #94a3b8;
-      margin-bottom: 2rem;
-    }
+      .subtitle {
+        color: #94a3b8;
+        margin-bottom: 2rem;
+      }
 
-    .demo-section {
-      background: #1e293b;
-      border-radius: 0.75rem;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
+      .demo-section {
+        background: #1e293b;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
 
-    h2 {
-      font-size: 1.25rem;
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: #f1f5f9;
-    }
+      h2 {
+        font-size: 1.25rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: #f1f5f9;
+      }
 
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
 
-    button {
-      padding: 0.75rem 1.25rem;
-      border: none;
-      border-radius: 0.5rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: transform 0.1s, opacity 0.15s;
-    }
+      button {
+        padding: 0.75rem 1.25rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition:
+          transform 0.1s,
+          opacity 0.15s;
+      }
 
-    button:hover {
-      opacity: 0.9;
-    }
+      button:hover {
+        opacity: 0.9;
+      }
 
-    button:active {
-      transform: scale(0.98);
-    }
+      button:active {
+        transform: scale(0.98);
+      }
 
-    .btn-success { background: var(--success); color: white; }
-    .btn-error { background: var(--error); color: white; }
-    .btn-warning { background: var(--warning); color: black; }
-    .btn-info { background: var(--primary); color: white; }
-    .btn-loading { background: #8b5cf6; color: white; }
-    .btn-secondary { background: #475569; color: white; }
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+      .btn-error {
+        background: var(--error);
+        color: white;
+      }
+      .btn-warning {
+        background: var(--warning);
+        color: black;
+      }
+      .btn-info {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-loading {
+        background: #8b5cf6;
+        color: white;
+      }
+      .btn-secondary {
+        background: #475569;
+        color: white;
+      }
 
-    .form-group {
-      margin-bottom: 1rem;
-    }
+      .form-group {
+        margin-bottom: 1rem;
+      }
 
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.875rem;
-    }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
 
-    input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #334155;
-      border-radius: 0.5rem;
-      background: #0f172a;
-      color: var(--text);
-      font-size: 1rem;
-    }
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #334155;
+        border-radius: 0.5rem;
+        background: #0f172a;
+        color: var(--text);
+        font-size: 1rem;
+      }
 
-    input:focus {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
+      input:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+      }
 
-    .log-container {
-      background: #0f172a;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      font-family: monospace;
-      font-size: 0.75rem;
-      max-height: 200px;
-      overflow-y: auto;
-    }
+      .log-container {
+        background: #0f172a;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        font-family: monospace;
+        font-size: 0.75rem;
+        max-height: 200px;
+        overflow-y: auto;
+      }
 
-    .log-entry {
-      padding: 0.25rem 0;
-      border-bottom: 1px solid #1e293b;
-    }
+      .log-entry {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid #1e293b;
+      }
 
-    .log-entry:last-child {
-      border-bottom: none;
-    }
+      .log-entry:last-child {
+        border-bottom: none;
+      }
 
-    .log-success { color: var(--success); }
-    .log-error { color: var(--error); }
-    .log-warning { color: var(--warning); }
-    .log-info { color: var(--primary); }
-    .log-loading { color: #8b5cf6; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>a11y-feedback Demo</h1>
-    <p class="subtitle">Accessibility-first feedback and announcement engine</p>
+      .log-success {
+        color: var(--success);
+      }
+      .log-error {
+        color: var(--error);
+      }
+      .log-warning {
+        color: var(--warning);
+      }
+      .log-info {
+        color: var(--primary);
+      }
+      .log-loading {
+        color: #8b5cf6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>a11y-feedback Demo</h1>
+      <p class="subtitle">Accessibility-first feedback and announcement engine</p>
 
-    <div class="demo-section">
-      <h2>Basic Notifications</h2>
-      <div class="button-group">
-        <button class="btn-success" onclick="showSuccess()">Success</button>
-        <button class="btn-error" onclick="showError()">Error</button>
-        <button class="btn-warning" onclick="showWarning()">Warning</button>
-        <button class="btn-info" onclick="showInfo()">Info</button>
-        <button class="btn-loading" onclick="showLoading()">Loading</button>
+      <div class="demo-section">
+        <h2>Basic Notifications</h2>
+        <div class="button-group">
+          <button class="btn-success" onclick="showSuccess()">Success</button>
+          <button class="btn-error" onclick="showError()">Error</button>
+          <button class="btn-warning" onclick="showWarning()">Warning</button>
+          <button class="btn-info" onclick="showInfo()">Info</button>
+          <button class="btn-loading" onclick="showLoading()">Loading</button>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>Focus Management</h2>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email" />
+        </div>
+        <div class="button-group">
+          <button class="btn-error" onclick="showErrorWithFocus()">Error + Focus on Email</button>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>Loading → Success Pattern</h2>
+        <div class="button-group">
+          <button class="btn-loading" onclick="simulateSave()">Simulate Save Operation</button>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>Visual Feedback</h2>
+        <div class="button-group">
+          <button class="btn-secondary" onclick="toggleVisual()">Toggle Visual Mode</button>
+          <button class="btn-secondary" onclick="dismissAll()">Dismiss All</button>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>Event Log</h2>
+        <div class="log-container" id="log"></div>
       </div>
     </div>
 
-    <div class="demo-section">
-      <h2>Focus Management</h2>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="Enter your email" />
-      </div>
-      <div class="button-group">
-        <button class="btn-error" onclick="showErrorWithFocus()">
-          Error + Focus on Email
-        </button>
-      </div>
-    </div>
+    <script type="module">
+      import {
+        notify,
+        configureFeedback,
+        enableFeedbackDebug,
+        getFeedbackLog,
+        dismissAllVisualFeedback,
+      } from '../dist/a11y-feedback.js'
 
-    <div class="demo-section">
-      <h2>Loading → Success Pattern</h2>
-      <div class="button-group">
-        <button class="btn-loading" onclick="simulateSave()">
-          Simulate Save Operation
-        </button>
-      </div>
-    </div>
+      // Enable debug mode
+      enableFeedbackDebug()
 
-    <div class="demo-section">
-      <h2>Visual Feedback</h2>
-      <div class="button-group">
-        <button class="btn-secondary" onclick="toggleVisual()">
-          Toggle Visual Mode
-        </button>
-        <button class="btn-secondary" onclick="dismissAll()">
-          Dismiss All
-        </button>
-      </div>
-    </div>
+      let visualEnabled = false
 
-    <div class="demo-section">
-      <h2>Event Log</h2>
-      <div class="log-container" id="log"></div>
-    </div>
-  </div>
+      function logEvent(message, type) {
+        const log = document.getElementById('log')
+        const entry = document.createElement('div')
+        entry.className = `log-entry log-${type}`
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${type.toUpperCase()}: ${message}`
+        log.insertBefore(entry, log.firstChild)
+      }
 
-  <script type="module">
-    import {
-      notify,
-      configureFeedback,
-      enableFeedbackDebug,
-      getFeedbackLog,
-      dismissAllVisualFeedback
-    } from '../dist/a11y-feedback.js'
+      window.showSuccess = async () => {
+        await notify.success('Operation completed successfully')
+        logEvent('Operation completed successfully', 'success')
+      }
 
-    // Enable debug mode
-    enableFeedbackDebug()
+      window.showError = async () => {
+        await notify.error('Something went wrong. Please try again.')
+        logEvent('Something went wrong. Please try again.', 'error')
+      }
 
-    let visualEnabled = false
+      window.showWarning = async () => {
+        await notify.warning('Your session will expire in 5 minutes')
+        logEvent('Your session will expire in 5 minutes', 'warning')
+      }
 
-    function logEvent(message, type) {
-      const log = document.getElementById('log')
-      const entry = document.createElement('div')
-      entry.className = `log-entry log-${type}`
-      entry.textContent = `[${new Date().toLocaleTimeString()}] ${type.toUpperCase()}: ${message}`
-      log.insertBefore(entry, log.firstChild)
-    }
+      window.showInfo = async () => {
+        await notify.info('New features are available!')
+        logEvent('New features are available!', 'info')
+      }
 
-    window.showSuccess = async () => {
-      await notify.success('Operation completed successfully')
-      logEvent('Operation completed successfully', 'success')
-    }
+      window.showLoading = async () => {
+        await notify.loading('Processing your request...')
+        logEvent('Processing your request...', 'loading')
+      }
 
-    window.showError = async () => {
-      await notify.error('Something went wrong. Please try again.')
-      logEvent('Something went wrong. Please try again.', 'error')
-    }
+      window.showErrorWithFocus = async () => {
+        await notify.error('Please enter a valid email address', {
+          focus: '#email',
+          explainFocus: true,
+        })
+        logEvent('Please enter a valid email address (focus moved to email)', 'error')
+      }
 
-    window.showWarning = async () => {
-      await notify.warning('Your session will expire in 5 minutes')
-      logEvent('Your session will expire in 5 minutes', 'warning')
-    }
+      window.simulateSave = async () => {
+        await notify.loading('Saving your changes...', { id: 'save-op' })
+        logEvent('Saving your changes...', 'loading')
 
-    window.showInfo = async () => {
-      await notify.info('New features are available!')
-      logEvent('New features are available!', 'info')
-    }
+        // Simulate API call
+        setTimeout(async () => {
+          await notify.success('Changes saved successfully!', { id: 'save-op' })
+          logEvent('Changes saved successfully! (replaced loading)', 'success')
+        }, 2000)
+      }
 
-    window.showLoading = async () => {
-      await notify.loading('Processing your request...')
-      logEvent('Processing your request...', 'loading')
-    }
+      window.toggleVisual = () => {
+        visualEnabled = !visualEnabled
+        configureFeedback({ visual: visualEnabled })
+        logEvent(`Visual feedback ${visualEnabled ? 'enabled' : 'disabled'}`, 'info')
+      }
 
-    window.showErrorWithFocus = async () => {
-      await notify.error('Please enter a valid email address', {
-        focus: '#email',
-        explainFocus: true
-      })
-      logEvent('Please enter a valid email address (focus moved to email)', 'error')
-    }
-
-    window.simulateSave = async () => {
-      await notify.loading('Saving your changes...', { id: 'save-op' })
-      logEvent('Saving your changes...', 'loading')
-
-      // Simulate API call
-      setTimeout(async () => {
-        await notify.success('Changes saved successfully!', { id: 'save-op' })
-        logEvent('Changes saved successfully! (replaced loading)', 'success')
-      }, 2000)
-    }
-
-    window.toggleVisual = () => {
-      visualEnabled = !visualEnabled
-      configureFeedback({ visual: visualEnabled })
-      logEvent(`Visual feedback ${visualEnabled ? 'enabled' : 'disabled'}`, 'info')
-    }
-
-    window.dismissAll = () => {
-      dismissAllVisualFeedback()
-      logEvent('Dismissed all visual feedback', 'info')
-    }
-  </script>
-</body>
+      window.dismissAll = () => {
+        dismissAllVisualFeedback()
+        logEvent('Dismissed all visual feedback', 'info')
+      }
+    </script>
+  </body>
 </html>
-

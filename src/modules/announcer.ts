@@ -42,7 +42,8 @@ export async function announce(event: FeedbackEvent): Promise<void> {
   const { message, ariaLive, options } = event
 
   // Get the last message and timestamp for this region
-  const lastMessage = ariaLive === 'assertive' ? state.lastAssertiveMessage : state.lastPoliteMessage
+  const lastMessage =
+    ariaLive === 'assertive' ? state.lastAssertiveMessage : state.lastPoliteMessage
   const lastTimestamp =
     ariaLive === 'assertive' ? state.lastAssertiveTimestamp : state.lastPoliteTimestamp
 
@@ -236,4 +237,3 @@ export function cancelPendingAnnouncements(): void {
   pendingPolite = null
   pendingAssertive = null
 }
-

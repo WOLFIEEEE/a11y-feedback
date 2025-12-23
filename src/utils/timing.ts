@@ -114,14 +114,11 @@ export function throttle<T extends (...args: Parameters<T>) => void>(
       lastCall = now
       fn(...args)
     } else if (timeoutId === null) {
-      timeoutId = setTimeout(
-        () => {
-          lastCall = Date.now()
-          fn(...args)
-          timeoutId = null
-        },
-        limit - timeSinceLastCall
-      )
+      timeoutId = setTimeout(() => {
+        lastCall = Date.now()
+        fn(...args)
+        timeoutId = null
+      }, limit - timeSinceLastCall)
     }
   }
 }
@@ -135,4 +132,3 @@ export function throttle<T extends (...args: Parameters<T>) => void>(
 export function isNoAutoDismiss(timeout: number): boolean {
   return timeout === 0 || timeout === Infinity || !Number.isFinite(timeout)
 }
-

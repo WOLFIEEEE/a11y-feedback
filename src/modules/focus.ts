@@ -235,4 +235,3 @@ export function restoreFocus(element: HTMLElement | null): boolean {
     return false
   }
 }
-

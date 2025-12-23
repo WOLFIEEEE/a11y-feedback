@@ -188,4 +188,3 @@ export function reinitializeRegions(): boolean {
   destroyRegions()
   return initializeRegions()
 }
-

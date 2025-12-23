@@ -50,4 +50,3 @@ export { isFeedbackType, isFeedbackOptions } from './types'
 
 // Constants (for advanced usage)
 export { FEEDBACK_SEMANTICS, DEFAULT_TIMEOUTS } from './constants'
-

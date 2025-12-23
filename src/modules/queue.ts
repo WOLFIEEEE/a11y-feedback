@@ -254,4 +254,3 @@ export function resetQueue(): void {
   isProcessing = false
   processCallback = null
 }
-
