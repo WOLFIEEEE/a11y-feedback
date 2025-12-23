@@ -40,21 +40,51 @@
           <span class="logo-icon">♿</span>
           <span class="logo-text">a11y-feedback</span>
         </a>
-        <nav class="nav" aria-label="Main navigation">
+        
+        <!-- Desktop Nav -->
+        <nav class="nav nav-desktop" aria-label="Main navigation">
           <a href="#demo" class="nav-link">Demo</a>
           <a href="#features" class="nav-link">Features</a>
-          <a href="#usage" class="nav-link">Usage</a>
+          <a href="#frameworks" class="nav-link">Frameworks</a>
+          <a href="#playground" class="nav-link">Playground</a>
           <a href="https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback" class="nav-link" target="_blank" rel="noopener">npm</a>
-          <a href="https://github.com/WOLFIEEEE/npm-extention" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/WOLFIEEEE/npm-extention" class="nav-link nav-link-github" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
         </nav>
+        
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
       </div>
     </div>
+    
+    <!-- Mobile Nav -->
+    <nav id="mobile-nav" class="nav-mobile" aria-label="Mobile navigation" hidden>
+      <div class="mobile-nav-content">
+        <a href="#demo" class="mobile-nav-link">Demo</a>
+        <a href="#features" class="mobile-nav-link">Features</a>
+        <a href="#frameworks" class="mobile-nav-link">Frameworks</a>
+        <a href="#playground" class="mobile-nav-link">Playground</a>
+        <a href="https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback" class="mobile-nav-link" target="_blank" rel="noopener">npm</a>
+        <a href="https://github.com/WOLFIEEEE/npm-extention" class="mobile-nav-link" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </nav>
   </header>
 
   <!-- Hero Section -->
   <section class="hero">
+    <div class="hero-bg-pattern"></div>
     <div class="container">
       <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Open Source & Free
+        </div>
         <h1 class="hero-title">
           <span class="hero-title-line">Accessibility-First</span>
           <span class="hero-title-line gradient-text">Feedback Engine</span>
@@ -82,6 +112,21 @@
           <a href="#demo" class="btn btn-primary">Try Live Demo</a>
           <a href="https://github.com/WOLFIEEEE/npm-extention#readme" class="btn btn-secondary" target="_blank" rel="noopener">Documentation</a>
         </div>
+        
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">~8KB</span>
+            <span class="stat-label">gzipped</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">0</span>
+            <span class="stat-label">dependencies</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">TypeScript</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -92,8 +137,30 @@
     <!-- Demo Section -->
     <section id="demo" class="section demo-section">
       <div class="container">
-        <h2 class="section-title">Live Demo</h2>
+        <h2 class="section-title">Interactive Demo</h2>
         <p class="section-subtitle">Experience the library in action. Use a screen reader for the full accessibility experience.</p>
+        
+        <!-- Screen Reader Panel -->
+        <div class="sr-panel">
+          <div class="sr-panel-header">
+            <div class="sr-panel-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </div>
+            <div class="sr-panel-title">
+              <h3>Screen Reader Simulation</h3>
+              <p>See what assistive technology users hear</p>
+            </div>
+            <button class="sr-panel-clear" aria-label="Clear announcements">Clear</button>
+          </div>
+          <div class="sr-panel-timeline" id="sr-timeline" role="log" aria-label="Screen reader announcement timeline">
+            <div class="sr-empty">Announcements will appear here as you interact...</div>
+          </div>
+        </div>
         
         <!-- Visual Feedback Toggle -->
         <div class="demo-card visual-toggle-card">
@@ -139,43 +206,95 @@
           </div>
         </div>
 
-        <!-- Focus Management -->
-        <div class="demo-card">
-          <h3 class="demo-card-title">Focus Management</h3>
-          <p class="demo-card-description">Errors can move focus to the source. Success and info types are blocked from stealing focus.</p>
-          <div class="demo-form">
+        <!-- Form Validation Demo -->
+        <div class="demo-card" id="form-demo">
+          <h3 class="demo-card-title">Form Validation Demo</h3>
+          <p class="demo-card-description">Complete form with accessible validation. Errors move focus to the first invalid field.</p>
+          <form class="demo-form-full" id="validation-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="form-name" class="form-label">Full Name <span class="required">*</span></label>
+                <input 
+                  type="text" 
+                  id="form-name" 
+                  class="form-input" 
+                  placeholder="John Doe"
+                  required
+                  aria-describedby="name-error"
+                >
+                <span id="name-error" class="form-error" role="alert" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label for="form-email" class="form-label">Email Address <span class="required">*</span></label>
+                <input 
+                  type="email" 
+                  id="form-email" 
+                  class="form-input" 
+                  placeholder="john@example.com"
+                  required
+                  aria-describedby="email-error"
+                >
+                <span id="email-error" class="form-error" role="alert" aria-live="polite"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="form-password" class="form-label">Password <span class="required">*</span></label>
+                <input 
+                  type="password" 
+                  id="form-password" 
+                  class="form-input" 
+                  placeholder="At least 8 characters"
+                  required
+                  minlength="8"
+                  aria-describedby="password-hint password-error"
+                >
+                <span id="password-hint" class="form-hint">Minimum 8 characters</span>
+                <span id="password-error" class="form-error" role="alert" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label for="form-confirm" class="form-label">Confirm Password <span class="required">*</span></label>
+                <input 
+                  type="password" 
+                  id="form-confirm" 
+                  class="form-input" 
+                  placeholder="Repeat password"
+                  required
+                  aria-describedby="confirm-error"
+                >
+                <span id="confirm-error" class="form-error" role="alert" aria-live="polite"></span>
+              </div>
+            </div>
             <div class="form-group">
-              <label for="demo-email" class="form-label">Email Address</label>
-              <input 
-                type="email" 
-                id="demo-email" 
-                class="form-input" 
-                placeholder="Enter your email"
-                aria-describedby="email-hint"
-              >
-              <span id="email-hint" class="form-hint">We'll use this to contact you</span>
+              <label class="checkbox-label">
+                <input type="checkbox" id="form-terms" required>
+                <span class="checkbox-text">I agree to the Terms of Service</span>
+              </label>
+              <span id="terms-error" class="form-error" role="alert" aria-live="polite"></span>
             </div>
             <div class="form-actions">
-              <button class="demo-btn demo-btn-error" data-action="error-focus">
-                Show Error + Focus
+              <button type="submit" class="btn btn-primary">
+                <span class="btn-text">Create Account</span>
+                <span class="btn-loading" hidden>Creating...</span>
               </button>
-              <button class="demo-btn demo-btn-success" data-action="success-no-focus">
-                Success (No Focus Steal)
-              </button>
+              <button type="reset" class="btn btn-secondary">Reset Form</button>
             </div>
-          </div>
+          </form>
         </div>
 
         <!-- Loading Pattern -->
         <div class="demo-card">
           <h3 class="demo-card-title">Loading → Success Pattern</h3>
-          <p class="demo-card-description">Use the same ID to replace loading states with results. No duplicate announcements.</p>
+          <p class="demo-card-description">Use the same ID to replace loading states with results. Watch the screen reader panel.</p>
           <div class="demo-buttons">
             <button class="demo-btn demo-btn-loading" data-action="save-pattern">
               <span class="btn-icon">💾</span> Simulate Save Operation
             </button>
+            <button class="demo-btn demo-btn-error" data-action="save-error">
+              <span class="btn-icon">❌</span> Simulate Failed Save
+            </button>
           </div>
-          <div class="pattern-status" id="save-status" aria-live="off">
+          <div class="pattern-status" id="save-status">
             <span class="status-idle">Click to start</span>
           </div>
         </div>
@@ -194,18 +313,6 @@
           </div>
           <div class="dedupe-counter">
             <span>Announcements made: <strong id="announce-count">0</strong></span>
-          </div>
-        </div>
-
-        <!-- Event Log -->
-        <div class="demo-card log-card">
-          <h3 class="demo-card-title">Event Log</h3>
-          <p class="demo-card-description">Real-time log of all feedback events and their metadata.</p>
-          <div class="log-actions">
-            <button class="demo-btn demo-btn-secondary" data-action="clear-log">Clear Log</button>
-          </div>
-          <div class="log-container" id="event-log" role="log" aria-label="Feedback event log">
-            <div class="log-empty">Events will appear here...</div>
           </div>
         </div>
       </div>
@@ -255,20 +362,38 @@
           </div>
           
           <div class="feature-card">
-            <div class="feature-icon">📦</div>
-            <h3 class="feature-title">Zero Dependencies</h3>
+            <div class="feature-icon">🌍</div>
+            <h3 class="feature-title">i18n & RTL Ready</h3>
             <p class="feature-description">
-              Lightweight (~20KB). No external dependencies. 
-              Works with any framework or vanilla JavaScript.
+              Built-in support for 10+ languages. Automatic RTL detection.
+              Custom translations for all UI strings.
             </p>
           </div>
           
           <div class="feature-card">
-            <div class="feature-icon">🔧</div>
-            <h3 class="feature-title">TypeScript Ready</h3>
+            <div class="feature-icon">🎨</div>
+            <h3 class="feature-title">Themeable</h3>
             <p class="feature-description">
-              Full TypeScript support with strict types. 
-              Excellent IDE autocompletion and type safety.
+              Full CSS custom properties support. Light/dark mode. 
+              Customize colors, spacing, animations.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">📡</div>
+            <h3 class="feature-title">Event System</h3>
+            <p class="feature-description">
+              Subscribe to feedback events for analytics and logging.
+              Track announcements, dismissals, and focus changes.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <h3 class="feature-title">Zero Dependencies</h3>
+            <p class="feature-description">
+              Lightweight (~8KB gzip). No external dependencies. 
+              Works with any framework or vanilla JavaScript.
             </p>
           </div>
         </div>
@@ -276,161 +401,350 @@
         <!-- Semantics Table -->
         <div class="semantics-table-wrapper">
           <h3 class="table-title">Semantic Mappings (Enforced)</h3>
-          <table class="semantics-table">
-            <thead>
-              <tr>
-                <th scope="col">Type</th>
-                <th scope="col">ARIA Role</th>
-                <th scope="col">aria-live</th>
-                <th scope="col">Priority</th>
-                <th scope="col">Can Move Focus</th>
-                <th scope="col">Auto-Dismiss</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="type-badge type-success">success</span></td>
-                <td><code>status</code></td>
-                <td><code>polite</code></td>
-                <td>Low</td>
-                <td><span class="badge badge-no">No</span></td>
-                <td><span class="badge badge-yes">Yes</span></td>
-              </tr>
-              <tr>
-                <td><span class="type-badge type-info">info</span></td>
-                <td><code>status</code></td>
-                <td><code>polite</code></td>
-                <td>Low</td>
-                <td><span class="badge badge-no">No</span></td>
-                <td><span class="badge badge-yes">Yes</span></td>
-              </tr>
-              <tr>
-                <td><span class="type-badge type-loading">loading</span></td>
-                <td><code>status</code></td>
-                <td><code>polite</code></td>
-                <td>Low</td>
-                <td><span class="badge badge-no">No</span></td>
-                <td><span class="badge badge-no">No</span></td>
-              </tr>
-              <tr>
-                <td><span class="type-badge type-warning">warning</span></td>
-                <td><code>alert</code></td>
-                <td><code>assertive</code></td>
-                <td>High</td>
-                <td><span class="badge badge-yes">Yes</span></td>
-                <td><span class="badge badge-yes">Yes</span></td>
-              </tr>
-              <tr>
-                <td><span class="type-badge type-error">error</span></td>
-                <td><code>alert</code></td>
-                <td><code>assertive</code></td>
-                <td>High</td>
-                <td><span class="badge badge-yes">Yes</span></td>
-                <td><span class="badge badge-no">No</span></td>
-              </tr>
-            </tbody>
-          </table>
+          <p class="table-subtitle">These mappings are non-configurable to prevent accessibility misuse.</p>
+          <div class="table-scroll">
+            <table class="semantics-table">
+              <thead>
+                <tr>
+                  <th scope="col">Type</th>
+                  <th scope="col">ARIA Role</th>
+                  <th scope="col">aria-live</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col">Can Move Focus</th>
+                  <th scope="col">Auto-Dismiss</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="type-badge type-success">success</span></td>
+                  <td><code>status</code></td>
+                  <td><code>polite</code></td>
+                  <td>Low</td>
+                  <td><span class="badge badge-no">No</span></td>
+                  <td><span class="badge badge-yes">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="type-badge type-info">info</span></td>
+                  <td><code>status</code></td>
+                  <td><code>polite</code></td>
+                  <td>Low</td>
+                  <td><span class="badge badge-no">No</span></td>
+                  <td><span class="badge badge-yes">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="type-badge type-loading">loading</span></td>
+                  <td><code>status</code></td>
+                  <td><code>polite</code></td>
+                  <td>Low</td>
+                  <td><span class="badge badge-no">No</span></td>
+                  <td><span class="badge badge-no">No</span></td>
+                </tr>
+                <tr>
+                  <td><span class="type-badge type-warning">warning</span></td>
+                  <td><code>alert</code></td>
+                  <td><code>assertive</code></td>
+                  <td>High</td>
+                  <td><span class="badge badge-yes">Yes</span></td>
+                  <td><span class="badge badge-yes">Yes</span></td>
+                </tr>
+                <tr>
+                  <td><span class="type-badge type-error">error</span></td>
+                  <td><code>alert</code></td>
+                  <td><code>assertive</code></td>
+                  <td>High</td>
+                  <td><span class="badge badge-yes">Yes</span></td>
+                  <td><span class="badge badge-no">No</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Usage Section -->
-    <section id="usage" class="section usage-section">
+    <!-- Framework Section -->
+    <section id="frameworks" class="section frameworks-section">
       <div class="container">
-        <h2 class="section-title">Quick Start</h2>
-        <p class="section-subtitle">Get started in seconds with a simple, intuitive API.</p>
+        <h2 class="section-title">Framework Integration</h2>
+        <p class="section-subtitle">First-class bindings for popular frameworks, or use vanilla JavaScript.</p>
         
-        <div class="code-examples">
-          <div class="code-card">
-            <div class="code-header">
-              <span class="code-title">Basic Usage</span>
-              <button class="copy-btn" data-copy="import { notify } from '@theaccessibleteam/a11y-feedback'
-
-notify.success('Profile updated successfully')
-notify.error('Something went wrong')
-notify.warning('Your session expires in 5 minutes')
-notify.info('New features available')
-notify.loading('Saving changes...')" aria-label="Copy code">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </button>
-            </div>
-            <pre class="code-block"><code><span class="code-keyword">import</span> { notify } <span class="code-keyword">from</span> <span class="code-string">'@theaccessibleteam/a11y-feedback'</span>
-
-notify.<span class="code-function">success</span>(<span class="code-string">'Profile updated successfully'</span>)
-notify.<span class="code-function">error</span>(<span class="code-string">'Something went wrong'</span>)
-notify.<span class="code-function">warning</span>(<span class="code-string">'Your session expires in 5 minutes'</span>)
-notify.<span class="code-function">info</span>(<span class="code-string">'New features available'</span>)
-notify.<span class="code-function">loading</span>(<span class="code-string">'Saving changes...'</span>)</code></pre>
+        <div class="framework-tabs">
+          <div class="tabs-nav" role="tablist">
+            <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-vanilla" id="btn-vanilla">
+              Vanilla JS
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-react" id="btn-react">
+              React
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-vue" id="btn-vue">
+              Vue 3
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-cdn" id="btn-cdn">
+              CDN / HTML
+            </button>
           </div>
+          
+          <div class="tabs-content">
+            <!-- Vanilla JS Tab -->
+            <div class="tab-panel active" role="tabpanel" id="tab-vanilla" aria-labelledby="btn-vanilla">
+              <div class="code-card">
+                <div class="code-header">
+                  <span class="code-title">TypeScript / JavaScript</span>
+                  <button class="copy-btn" data-copy="import { notify, configureFeedback } from '@theaccessibleteam/a11y-feedback'
 
-          <div class="code-card">
-            <div class="code-header">
-              <span class="code-title">Error with Focus</span>
-              <button class="copy-btn" data-copy="notify.error('Please enter a valid email', {
+// Enable visual toasts
+configureFeedback({ visual: true })
+
+// Simple notifications
+notify.success('Profile saved!')
+notify.error('Something went wrong')
+
+// With options
+notify.error('Invalid email', {
   focus: '#email',
   explainFocus: true
 })" aria-label="Copy code">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </button>
-            </div>
-            <pre class="code-block"><code>notify.<span class="code-function">error</span>(<span class="code-string">'Please enter a valid email'</span>, {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="code-keyword">import</span> { notify, configureFeedback } <span class="code-keyword">from</span> <span class="code-string">'@theaccessibleteam/a11y-feedback'</span>
+
+<span class="code-comment">// Enable visual toasts</span>
+<span class="code-function">configureFeedback</span>({ <span class="code-property">visual</span>: <span class="code-keyword">true</span> })
+
+<span class="code-comment">// Simple notifications</span>
+notify.<span class="code-function">success</span>(<span class="code-string">'Profile saved!'</span>)
+notify.<span class="code-function">error</span>(<span class="code-string">'Something went wrong'</span>)
+
+<span class="code-comment">// With options</span>
+notify.<span class="code-function">error</span>(<span class="code-string">'Invalid email'</span>, {
   <span class="code-property">focus</span>: <span class="code-string">'#email'</span>,
   <span class="code-property">explainFocus</span>: <span class="code-keyword">true</span>
-})
-<span class="code-comment">// Screen reader: "Please enter a valid email. Focus moved to Email field."</span></code></pre>
-          </div>
-
-          <div class="code-card">
-            <div class="code-header">
-              <span class="code-title">Loading → Success Pattern</span>
-              <button class="copy-btn" data-copy="// Start loading
-notify.loading('Saving...', { id: 'save-op' })
-
-// Later, replace with success
-notify.success('Saved!', { id: 'save-op' })" aria-label="Copy code">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </button>
-            </div>
-            <pre class="code-block"><code><span class="code-comment">// Start loading</span>
-notify.<span class="code-function">loading</span>(<span class="code-string">'Saving...'</span>, { <span class="code-property">id</span>: <span class="code-string">'save-op'</span> })
-
-<span class="code-comment">// Later, replace with success</span>
-notify.<span class="code-function">success</span>(<span class="code-string">'Saved!'</span>, { <span class="code-property">id</span>: <span class="code-string">'save-op'</span> })</code></pre>
-          </div>
-
-          <div class="code-card">
-            <div class="code-header">
-              <span class="code-title">Enable Visual Mode</span>
-              <button class="copy-btn" data-copy="import { configureFeedback } from '@theaccessibleteam/a11y-feedback'
-
-configureFeedback({
-  visual: true,
-  visualPosition: 'top-right',
-  maxVisualItems: 5
-})" aria-label="Copy code">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </button>
-            </div>
-            <pre class="code-block"><code><span class="code-keyword">import</span> { configureFeedback } <span class="code-keyword">from</span> <span class="code-string">'@theaccessibleteam/a11y-feedback'</span>
-
-<span class="code-function">configureFeedback</span>({
-  <span class="code-property">visual</span>: <span class="code-keyword">true</span>,
-  <span class="code-property">visualPosition</span>: <span class="code-string">'top-right'</span>,
-  <span class="code-property">maxVisualItems</span>: <span class="code-number">5</span>
 })</code></pre>
+              </div>
+            </div>
+            
+            <!-- React Tab -->
+            <div class="tab-panel" role="tabpanel" id="tab-react" aria-labelledby="btn-react" hidden>
+              <div class="code-card">
+                <div class="code-header">
+                  <span class="code-title">React with Hooks</span>
+                  <button class="copy-btn" data-copy="import { useA11yFeedback } from '@theaccessibleteam/a11y-feedback-react'
+
+function SaveButton() {
+  const feedback = useA11yFeedback()
+
+  const handleSave = async () => {
+    feedback.loading('Saving...', { id: 'save' })
+    
+    try {
+      await saveData()
+      feedback.success('Saved!', { id: 'save' })
+    } catch (e) {
+      feedback.error('Failed to save', { id: 'save' })
+    }
+  }
+
+  return <button onClick={handleSave}>Save</button>
+}" aria-label="Copy code">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="code-keyword">import</span> { useA11yFeedback } <span class="code-keyword">from</span> <span class="code-string">'@theaccessibleteam/a11y-feedback-react'</span>
+
+<span class="code-keyword">function</span> <span class="code-function">SaveButton</span>() {
+  <span class="code-keyword">const</span> feedback = <span class="code-function">useA11yFeedback</span>()
+
+  <span class="code-keyword">const</span> handleSave = <span class="code-keyword">async</span> () => {
+    feedback.<span class="code-function">loading</span>(<span class="code-string">'Saving...'</span>, { <span class="code-property">id</span>: <span class="code-string">'save'</span> })
+    
+    <span class="code-keyword">try</span> {
+      <span class="code-keyword">await</span> <span class="code-function">saveData</span>()
+      feedback.<span class="code-function">success</span>(<span class="code-string">'Saved!'</span>, { <span class="code-property">id</span>: <span class="code-string">'save'</span> })
+    } <span class="code-keyword">catch</span> (e) {
+      feedback.<span class="code-function">error</span>(<span class="code-string">'Failed to save'</span>, { <span class="code-property">id</span>: <span class="code-string">'save'</span> })
+    }
+  }
+
+  <span class="code-keyword">return</span> &lt;<span class="code-tag">button</span> <span class="code-property">onClick</span>={handleSave}&gt;Save&lt;/<span class="code-tag">button</span>&gt;
+}</code></pre>
+              </div>
+              <p class="install-hint">Install: <code>npm i @theaccessibleteam/a11y-feedback-react</code></p>
+            </div>
+            
+            <!-- Vue Tab -->
+            <div class="tab-panel" role="tabpanel" id="tab-vue" aria-labelledby="btn-vue" hidden>
+              <div class="code-card">
+                <div class="code-header">
+                  <span class="code-title">Vue 3 Composition API</span>
+                  <button class="copy-btn" data-copy="<script setup>
+import { useA11yFeedback } from '@theaccessibleteam/a11y-feedback-vue'
+
+const feedback = useA11yFeedback()
+
+async function handleSubmit() {
+  feedback.loading('Submitting...', { id: 'submit' })
+
+  try {
+    await submitForm()
+    feedback.success('Submitted!', { id: 'submit' })
+  } catch (e) {
+    feedback.error('Submission failed', { id: 'submit' })
+  }
+}
+</script>
+
+<template>
+  <button @click=\"handleSubmit\">Submit</button>
+</template>" aria-label="Copy code">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { useA11yFeedback } <span class="code-keyword">from</span> <span class="code-string">'@theaccessibleteam/a11y-feedback-vue'</span>
+
+<span class="code-keyword">const</span> feedback = <span class="code-function">useA11yFeedback</span>()
+
+<span class="code-keyword">async function</span> <span class="code-function">handleSubmit</span>() {
+  feedback.<span class="code-function">loading</span>(<span class="code-string">'Submitting...'</span>, { <span class="code-property">id</span>: <span class="code-string">'submit'</span> })
+
+  <span class="code-keyword">try</span> {
+    <span class="code-keyword">await</span> <span class="code-function">submitForm</span>()
+    feedback.<span class="code-function">success</span>(<span class="code-string">'Submitted!'</span>, { <span class="code-property">id</span>: <span class="code-string">'submit'</span> })
+  } <span class="code-keyword">catch</span> (e) {
+    feedback.<span class="code-function">error</span>(<span class="code-string">'Submission failed'</span>, { <span class="code-property">id</span>: <span class="code-string">'submit'</span> })
+  }
+}
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  &lt;<span class="code-tag">button</span> <span class="code-property">@click</span>=<span class="code-string">"handleSubmit"</span>&gt;Submit&lt;/<span class="code-tag">button</span>&gt;
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+              </div>
+              <p class="install-hint">Install: <code>npm i @theaccessibleteam/a11y-feedback-vue</code></p>
+            </div>
+            
+            <!-- CDN Tab -->
+            <div class="tab-panel" role="tabpanel" id="tab-cdn" aria-labelledby="btn-cdn" hidden>
+              <div class="code-card">
+                <div class="code-header">
+                  <span class="code-title">HTML with CDN</span>
+                  <button class="copy-btn" data-copy="<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+  <script src=\"https://unpkg.com/@theaccessibleteam/a11y-feedback/dist/a11y-feedback.umd.js\"></script>
+</head>
+<body>
+  <button id=\"save-btn\">Save</button>
+  
+  <script>
+    const { notify, configureFeedback } = window.A11yFeedback
+    
+    configureFeedback({ visual: true })
+    
+    document.getElementById('save-btn').addEventListener('click', () => {
+      notify.success('Saved successfully!')
+    })
+  </script>
+</body>
+</html>" aria-label="Copy code">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="code-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="code-tag">&lt;html</span> <span class="code-property">lang</span>=<span class="code-string">"en"</span><span class="code-tag">&gt;</span>
+<span class="code-tag">&lt;head&gt;</span>
+  <span class="code-tag">&lt;script</span> <span class="code-property">src</span>=<span class="code-string">"https://unpkg.com/@theaccessibleteam/a11y-feedback/dist/a11y-feedback.umd.js"</span><span class="code-tag">&gt;&lt;/script&gt;</span>
+<span class="code-tag">&lt;/head&gt;</span>
+<span class="code-tag">&lt;body&gt;</span>
+  <span class="code-tag">&lt;button</span> <span class="code-property">id</span>=<span class="code-string">"save-btn"</span><span class="code-tag">&gt;</span>Save<span class="code-tag">&lt;/button&gt;</span>
+  
+  <span class="code-tag">&lt;script&gt;</span>
+    <span class="code-keyword">const</span> { notify, configureFeedback } = window.A11yFeedback
+    
+    <span class="code-function">configureFeedback</span>({ <span class="code-property">visual</span>: <span class="code-keyword">true</span> })
+    
+    document.<span class="code-function">getElementById</span>(<span class="code-string">'save-btn'</span>).<span class="code-function">addEventListener</span>(<span class="code-string">'click'</span>, () => {
+      notify.<span class="code-function">success</span>(<span class="code-string">'Saved successfully!'</span>)
+    })
+  <span class="code-tag">&lt;/script&gt;</span>
+<span class="code-tag">&lt;/body&gt;</span>
+<span class="code-tag">&lt;/html&gt;</span></code></pre>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playground Section -->
+    <section id="playground" class="section playground-section">
+      <div class="container">
+        <h2 class="section-title">API Playground</h2>
+        <p class="section-subtitle">Experiment with the API in real-time. Edit the code and see results instantly.</p>
+        
+        <div class="playground-container">
+          <div class="playground-editor">
+            <div class="playground-header">
+              <span class="playground-title">Code Editor</span>
+              <button class="btn btn-small" id="run-code">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Run Code
+              </button>
+            </div>
+            <textarea 
+              id="playground-code" 
+              class="playground-textarea"
+              spellcheck="false"
+              aria-label="JavaScript code editor"
+>// Try editing this code and click "Run Code"
+notify.success('Hello from the playground!')
+
+// Try different types
+notify.info('This is an info message')
+
+// With options
+notify.warning('Session expires soon', {
+  id: 'session-warning'
+})
+
+// Replace a message by ID
+setTimeout(() => {
+  notify.error('Session expired!', {
+    id: 'session-warning'
+  })
+}, 2000)</textarea>
+          </div>
+          
+          <div class="playground-output">
+            <div class="playground-header">
+              <span class="playground-title">Output</span>
+              <button class="btn btn-small btn-secondary" id="clear-output">Clear</button>
+            </div>
+            <div id="playground-log" class="playground-log">
+              <div class="log-entry log-entry-info">[Ready] Click "Run Code" to execute</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="playground-examples">
+          <span class="examples-label">Try an example:</span>
+          <button class="example-btn" data-example="basic">Basic</button>
+          <button class="example-btn" data-example="loading">Loading Pattern</button>
+          <button class="example-btn" data-example="events">Event System</button>
+          <button class="example-btn" data-example="config">Configuration</button>
         </div>
       </div>
     </section>
@@ -464,14 +778,14 @@ configureFeedback({
           <span class="logo-icon">♿</span>
           <span class="logo-text">a11y-feedback</span>
         </div>
-        <p class="footer-tagline">Built by <a href="https://github.com/WOLFIEEEE" target="_blank" rel="noopener">@theaccessibleteam</a></p>
+        <p class="footer-tagline">Built by <a href="https://github.com/WOLFIEEEE" target="_blank" rel="noopener">The Accessible Team</a></p>
         <nav class="footer-links" aria-label="Footer navigation">
           <a href="https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback" target="_blank" rel="noopener">npm</a>
           <a href="https://github.com/WOLFIEEEE/npm-extention" target="_blank" rel="noopener">GitHub</a>
           <a href="https://github.com/WOLFIEEEE/npm-extention#readme" target="_blank" rel="noopener">Docs</a>
           <a href="https://github.com/WOLFIEEEE/npm-extention/issues" target="_blank" rel="noopener">Issues</a>
         </nav>
-        <p class="footer-license">MIT License</p>
+        <p class="footer-license">MIT License &middot; Making the web accessible for everyone</p>
       </div>
     </div>
   </footer>
@@ -483,4 +797,3 @@ configureFeedback({
   <script src="demo.js"></script>
 </body>
 </html>
-

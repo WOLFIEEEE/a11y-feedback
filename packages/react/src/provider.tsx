@@ -6,7 +6,6 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useCallback,
   type ReactNode,
 } from 'react'
 import {
@@ -135,7 +134,7 @@ export function A11yFeedbackProvider({
         notify.loading(message, options),
       notify,
       dismissAll: dismissAllVisualFeedback,
-      getLog: getFeedbackLog,
+      getLog: () => [...getFeedbackLog()],
       clearLog: clearFeedbackLog,
     }),
     []

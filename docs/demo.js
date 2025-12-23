@@ -1,13 +1,19 @@
 /**
  * a11y-feedback Demo Site Interactive Script
- * Uses the UMD build from the global A11yFeedback namespace
+ * Comprehensive demo with screen reader simulation, playground, and form validation
  */
 
 (function () {
   'use strict';
 
   // Get the library from the global namespace (UMD build)
-  const { notify, configureFeedback, enableFeedbackDebug, getFeedbackLog } = window.A11yFeedback;
+  const { 
+    notify, 
+    configureFeedback, 
+    enableFeedbackDebug, 
+    onFeedback,
+    onAnyFeedback 
+  } = window.A11yFeedback;
 
   // State
   let visualModeEnabled = false;
@@ -16,19 +22,100 @@
 
   // DOM Elements
   const visualToggle = document.getElementById('visual-toggle');
-  const emailInput = document.getElementById('demo-email');
   const saveStatus = document.getElementById('save-status');
   const announceCountEl = document.getElementById('announce-count');
-  const eventLog = document.getElementById('event-log');
+  const srTimeline = document.getElementById('sr-timeline');
+  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+  const mobileNav = document.getElementById('mobile-nav');
+  const playgroundCode = document.getElementById('playground-code');
+  const playgroundLog = document.getElementById('playground-log');
+  const validationForm = document.getElementById('validation-form');
 
-  // Enable debug mode to track all events
+  // Enable debug mode
   enableFeedbackDebug();
+
+  // ==========================================================================
+  // Screen Reader Simulation Panel
+  // ==========================================================================
+
+  function addSREntry(message, type, politeness) {
+    const srEmpty = srTimeline.querySelector('.sr-empty');
+    if (srEmpty) {
+      srEmpty.remove();
+    }
+
+    const entry = document.createElement('div');
+    entry.className = 'sr-entry';
+    entry.innerHTML = `
+      <span class="sr-entry-time">${new Date().toLocaleTimeString()}</span>
+      <div class="sr-entry-content">
+        <span class="sr-entry-type sr-entry-type-${politeness}">${politeness}</span>
+        <span class="sr-entry-message">${escapeHtml(message)}</span>
+      </div>
+    `;
+
+    srTimeline.insertBefore(entry, srTimeline.firstChild);
+
+    // Limit entries
+    while (srTimeline.children.length > 20) {
+      srTimeline.removeChild(srTimeline.lastChild);
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Clear SR panel button
+  document.querySelector('.sr-panel-clear')?.addEventListener('click', function() {
+    srTimeline.innerHTML = '<div class="sr-empty">Announcements will appear here as you interact...</div>';
+  });
+
+  // Subscribe to all feedback events
+  onAnyFeedback(function(type, payload) {
+    if (type === 'announced') {
+      const event = payload.event;
+      const politeness = event.ariaLive === 'assertive' ? 'assertive' : 'polite';
+      addSREntry(event.message, event.type, politeness);
+    }
+  });
+
+  // ==========================================================================
+  // Mobile Navigation
+  // ==========================================================================
+
+  if (mobileMenuBtn && mobileNav) {
+    mobileMenuBtn.addEventListener('click', function() {
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', (!isExpanded).toString());
+      mobileNav.hidden = isExpanded;
+    });
+
+    // Close mobile nav when clicking a link
+    mobileNav.querySelectorAll('.mobile-nav-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.hidden = true;
+      });
+    });
+
+    // Close on escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !mobileNav.hidden) {
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.hidden = true;
+        mobileMenuBtn.focus();
+      }
+    });
+  }
 
   // ==========================================================================
   // Visual Mode Toggle
   // ==========================================================================
 
-  visualToggle.addEventListener('click', function () {
+  visualToggle?.addEventListener('click', function () {
     visualModeEnabled = !visualModeEnabled;
     this.setAttribute('aria-checked', visualModeEnabled.toString());
 
@@ -38,14 +125,66 @@
       maxVisualItems: 5
     });
 
-    // Announce the change
     if (visualModeEnabled) {
-      notify.info('Visual feedback mode enabled. You will now see toast notifications.');
+      notify.info('Visual feedback mode enabled. Toast notifications will now appear.');
     } else {
       notify.info('Visual feedback mode disabled. Only screen reader announcements active.');
     }
+  });
 
-    logEvent('config', `Visual mode ${visualModeEnabled ? 'enabled' : 'disabled'}`);
+  // ==========================================================================
+  // Framework Tabs
+  // ==========================================================================
+
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const targetId = this.getAttribute('aria-controls');
+      
+      // Update buttons
+      tabButtons.forEach(function(b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      this.classList.add('active');
+      this.setAttribute('aria-selected', 'true');
+
+      // Update panels
+      tabPanels.forEach(function(panel) {
+        panel.classList.remove('active');
+        panel.hidden = true;
+      });
+      
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+        targetPanel.hidden = false;
+      }
+    });
+
+    // Keyboard navigation for tabs
+    btn.addEventListener('keydown', function(e) {
+      let newIndex;
+      const currentIndex = Array.from(tabButtons).indexOf(this);
+
+      if (e.key === 'ArrowRight') {
+        newIndex = (currentIndex + 1) % tabButtons.length;
+      } else if (e.key === 'ArrowLeft') {
+        newIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+      } else if (e.key === 'Home') {
+        newIndex = 0;
+      } else if (e.key === 'End') {
+        newIndex = tabButtons.length - 1;
+      }
+
+      if (newIndex !== undefined) {
+        e.preventDefault();
+        tabButtons[newIndex].click();
+        tabButtons[newIndex].focus();
+      }
+    });
   });
 
   // ==========================================================================
@@ -63,44 +202,35 @@
     switch (action) {
       case 'success':
         notify.success('Operation completed successfully!');
-        logEvent('success', 'Operation completed successfully!');
         incrementCount();
         break;
 
       case 'error':
         notify.error('Something went wrong. Please try again.');
-        logEvent('error', 'Something went wrong. Please try again.');
         incrementCount();
         break;
 
       case 'warning':
         notify.warning('Your session will expire in 5 minutes.');
-        logEvent('warning', 'Your session will expire in 5 minutes.');
         incrementCount();
         break;
 
       case 'info':
         notify.info('New features are available. Check the changelog.');
-        logEvent('info', 'New features are available. Check the changelog.');
         incrementCount();
         break;
 
       case 'loading':
         notify.loading('Processing your request...');
-        logEvent('loading', 'Processing your request...');
         incrementCount();
         break;
 
-      case 'error-focus':
-        handleErrorFocus();
-        break;
-
-      case 'success-no-focus':
-        handleSuccessNoFocus();
-        break;
-
       case 'save-pattern':
-        handleSavePattern();
+        handleSavePattern(true);
+        break;
+
+      case 'save-error':
+        handleSavePattern(false);
         break;
 
       case 'dedupe-test':
@@ -110,77 +240,155 @@
       case 'force-test':
         handleForceTest();
         break;
-
-      case 'clear-log':
-        clearLog();
-        break;
     }
   }
 
   // ==========================================================================
-  // Focus Management Demos
+  // Form Validation Demo
   // ==========================================================================
 
-  function handleErrorFocus() {
-    // Show error and move focus to the email input
-    notify.error('Please enter a valid email address.', {
-      focus: '#demo-email',
-      explainFocus: true
+  if (validationForm) {
+    validationForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnLoading = submitBtn.querySelector('.btn-loading');
+      
+      // Clear previous errors
+      this.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+      this.querySelectorAll('.form-input').forEach(el => {
+        el.classList.remove('error');
+        el.removeAttribute('aria-invalid');
+      });
+
+      // Validate fields
+      const name = document.getElementById('form-name');
+      const email = document.getElementById('form-email');
+      const password = document.getElementById('form-password');
+      const confirm = document.getElementById('form-confirm');
+      const terms = document.getElementById('form-terms');
+
+      let firstError = null;
+      let errors = [];
+
+      // Name validation
+      if (!name.value.trim()) {
+        setFieldError(name, 'name-error', 'Name is required');
+        if (!firstError) firstError = name;
+        errors.push('Name is required');
+      } else if (name.value.trim().length < 2) {
+        setFieldError(name, 'name-error', 'Name must be at least 2 characters');
+        if (!firstError) firstError = name;
+        errors.push('Name must be at least 2 characters');
+      }
+
+      // Email validation
+      if (!email.value.trim()) {
+        setFieldError(email, 'email-error', 'Email is required');
+        if (!firstError) firstError = email;
+        errors.push('Email is required');
+      } else if (!email.value.includes('@') || !email.value.includes('.')) {
+        setFieldError(email, 'email-error', 'Please enter a valid email address');
+        if (!firstError) firstError = email;
+        errors.push('Please enter a valid email address');
+      }
+
+      // Password validation
+      if (!password.value) {
+        setFieldError(password, 'password-error', 'Password is required');
+        if (!firstError) firstError = password;
+        errors.push('Password is required');
+      } else if (password.value.length < 8) {
+        setFieldError(password, 'password-error', 'Password must be at least 8 characters');
+        if (!firstError) firstError = password;
+        errors.push('Password must be at least 8 characters');
+      }
+
+      // Confirm password
+      if (password.value && password.value !== confirm.value) {
+        setFieldError(confirm, 'confirm-error', 'Passwords do not match');
+        if (!firstError) firstError = confirm;
+        errors.push('Passwords do not match');
+      }
+
+      // Terms checkbox
+      if (!terms.checked) {
+        document.getElementById('terms-error').textContent = 'You must agree to the Terms of Service';
+        if (!firstError) firstError = terms;
+        errors.push('You must agree to the Terms of Service');
+      }
+
+      // If errors, announce and focus first error
+      if (errors.length > 0) {
+        notify.error(`Please fix ${errors.length} error${errors.length > 1 ? 's' : ''}: ${errors[0]}`, {
+          focus: '#' + firstError.id,
+          explainFocus: true
+        });
+        return;
+      }
+
+      // Show loading state
+      btnText.hidden = true;
+      btnLoading.hidden = false;
+      submitBtn.disabled = true;
+
+      notify.loading('Creating your account...', { id: 'form-submit' });
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Success
+      notify.success('Account created successfully! Welcome aboard.', { id: 'form-submit' });
+      
+      btnText.hidden = false;
+      btnLoading.hidden = true;
+      submitBtn.disabled = false;
+      
+      // Reset form
+      this.reset();
     });
 
-    // Add error styling to input
-    emailInput.classList.add('error');
-    emailInput.setAttribute('aria-invalid', 'true');
-
-    logEvent('error', 'Email error with focus → #demo-email');
-    incrementCount();
-
-    // Remove error styling after a delay
-    setTimeout(function () {
-      emailInput.classList.remove('error');
-      emailInput.removeAttribute('aria-invalid');
-    }, 5000);
+    validationForm.addEventListener('reset', function() {
+      this.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+      this.querySelectorAll('.form-input').forEach(el => {
+        el.classList.remove('error');
+        el.removeAttribute('aria-invalid');
+      });
+      notify.info('Form has been reset.');
+    });
   }
 
-  function handleSuccessNoFocus() {
-    // This demonstrates that success notifications cannot steal focus
-    // Even if focus is specified, it should be blocked
-    notify.success('Profile saved successfully!', {
-      focus: '#demo-email' // This should be BLOCKED
-    });
-
-    logEvent('success', 'Success notification - focus steal blocked (correct behavior)');
-    incrementCount();
+  function setFieldError(field, errorId, message) {
+    field.classList.add('error');
+    field.setAttribute('aria-invalid', 'true');
+    document.getElementById(errorId).textContent = message;
   }
 
   // ==========================================================================
   // Loading → Success Pattern
   // ==========================================================================
 
-  function handleSavePattern() {
+  function handleSavePattern(shouldSucceed) {
     if (isSaving) return;
 
     isSaving = true;
 
-    // Update UI
     saveStatus.innerHTML = '<span class="status-loading">⏳ Saving changes...</span>';
 
-    // Start loading notification
     notify.loading('Saving your changes...', { id: 'save-operation' });
-    logEvent('loading', 'Saving your changes... [id: save-operation]');
     incrementCount();
 
-    // Simulate async operation
     setTimeout(function () {
-      // Replace loading with success using same ID
-      notify.success('Changes saved successfully!', { id: 'save-operation' });
-      logEvent('success', 'Changes saved successfully! [id: save-operation] (replaced loading)');
+      if (shouldSucceed) {
+        notify.success('Changes saved successfully!', { id: 'save-operation' });
+        saveStatus.innerHTML = '<span class="status-success">✓ Saved!</span>';
+      } else {
+        notify.error('Failed to save changes. Please try again.', { id: 'save-operation' });
+        saveStatus.innerHTML = '<span class="status-error">✕ Save failed</span>';
+      }
       incrementCount();
 
-      // Update UI
-      saveStatus.innerHTML = '<span class="status-success">✓ Saved!</span>';
-
-      // Reset after delay
       setTimeout(function () {
         saveStatus.innerHTML = '<span class="status-idle">Click to start</span>';
         isSaving = false;
@@ -193,63 +401,108 @@
   // ==========================================================================
 
   function handleDedupeTest() {
-    // This will be deduplicated if clicked rapidly
-    const result = notify.info('This message is deduplicated when clicked rapidly.');
-
-    if (result && result.announced) {
-      logEvent('info', 'Message announced (not deduped)');
-      incrementCount();
-    } else {
-      logEvent('info', 'Message SKIPPED (deduplicated)', true);
-    }
+    notify.info('This message is deduplicated when clicked rapidly.');
+    incrementCount();
   }
 
   function handleForceTest() {
-    // Force bypasses deduplication
     notify.info('This message is always announced!', { force: true });
-    logEvent('info', 'Forced announcement (always goes through)');
     incrementCount();
   }
 
   // ==========================================================================
-  // Event Log
+  // API Playground
   // ==========================================================================
 
-  function logEvent(type, message, skipped) {
-    const logEmpty = eventLog.querySelector('.log-empty');
-    if (logEmpty) {
-      logEmpty.remove();
-    }
+  const runCodeBtn = document.getElementById('run-code');
+  const clearOutputBtn = document.getElementById('clear-output');
 
-    const entry = document.createElement('div');
-    entry.className = 'log-entry log-entry-' + type;
+  if (runCodeBtn && playgroundCode && playgroundLog) {
+    runCodeBtn.addEventListener('click', function() {
+      const code = playgroundCode.value;
+      
+      // Clear previous output
+      playgroundLog.innerHTML = '';
+      
+      // Log function for output
+      const logToPlayground = function(message, type = 'info') {
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-entry-${type}`;
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        playgroundLog.appendChild(entry);
+        playgroundLog.scrollTop = playgroundLog.scrollHeight;
+      };
 
-    const timestamp = new Date().toLocaleTimeString();
-    const prefix = skipped ? '[SKIPPED] ' : '';
-    const typeLabel = type.toUpperCase().padEnd(8);
+      // Override console.log temporarily
+      const originalLog = console.log;
+      console.log = function(...args) {
+        logToPlayground(args.join(' '), 'info');
+        originalLog.apply(console, args);
+      };
 
-    entry.textContent = `[${timestamp}] ${typeLabel} ${prefix}${message}`;
+      try {
+        // Execute the code with notify available
+        const func = new Function('notify', 'configureFeedback', 'onFeedback', code);
+        func(notify, configureFeedback, onFeedback);
+        logToPlayground('Code executed successfully', 'success');
+      } catch (error) {
+        logToPlayground(`Error: ${error.message}`, 'error');
+      }
 
-    // Add to top of log
-    eventLog.insertBefore(entry, eventLog.firstChild);
+      // Restore console.log
+      console.log = originalLog;
+    });
 
-    // Keep only last 50 entries
-    while (eventLog.children.length > 50) {
-      eventLog.removeChild(eventLog.lastChild);
-    }
+    clearOutputBtn?.addEventListener('click', function() {
+      playgroundLog.innerHTML = '<div class="log-entry log-entry-info">[Ready] Click "Run Code" to execute</div>';
+    });
   }
 
-  function clearLog() {
-    eventLog.innerHTML = '<div class="log-empty">Events will appear here...</div>';
-    announceCount = 0;
-    announceCountEl.textContent = '0';
-    notify.info('Event log cleared.');
-  }
+  // Example code snippets
+  const examples = {
+    basic: `// Basic notifications
+notify.success('Profile saved successfully!')
+notify.info('New message received')
+notify.warning('Low storage space')
+notify.error('Connection lost')`,
 
-  function incrementCount() {
-    announceCount++;
-    announceCountEl.textContent = announceCount.toString();
-  }
+    loading: `// Loading → Success pattern
+notify.loading('Uploading file...', { id: 'upload' })
+
+// Simulate upload completion
+setTimeout(() => {
+  notify.success('File uploaded!', { id: 'upload' })
+}, 2000)`,
+
+    events: `// Listen to feedback events
+onFeedback('announced', ({ event, region }) => {
+  console.log(\`Announced to \${region}: \${event.message}\`)
+})
+
+// Trigger some notifications
+notify.success('This will be logged')
+notify.error('This too!')`,
+
+    config: `// Configure visual feedback
+configureFeedback({
+  visual: true,
+  visualPosition: 'bottom-right',
+  maxVisualItems: 3
+})
+
+notify.info('Visual toasts enabled!')
+notify.success('Try clicking multiple times')
+notify.warning('Only 3 will show at once')`
+  };
+
+  document.querySelectorAll('.example-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const exampleName = this.getAttribute('data-example');
+      if (examples[exampleName] && playgroundCode) {
+        playgroundCode.value = examples[exampleName];
+      }
+    });
+  });
 
   // ==========================================================================
   // Copy to Clipboard
@@ -262,17 +515,14 @@
 
       navigator.clipboard.writeText(textToCopy).then(
         function () {
-          // Show success state
           btn.classList.add('copied');
           const copyText = btn.querySelector('.copy-text');
           if (copyText) {
             copyText.textContent = 'Copied!';
           }
 
-          // Announce to screen readers
           notify.success('Copied to clipboard');
 
-          // Reset after delay
           setTimeout(function () {
             btn.classList.remove('copied');
             if (copyText) {
@@ -299,6 +549,13 @@
       const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
+        
+        // Close mobile nav if open
+        if (mobileNav && !mobileNav.hidden) {
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+          mobileNav.hidden = true;
+        }
+        
         target.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
@@ -312,17 +569,24 @@
   });
 
   // ==========================================================================
+  // Utility
+  // ==========================================================================
+
+  function incrementCount() {
+    announceCount++;
+    if (announceCountEl) {
+      announceCountEl.textContent = announceCount.toString();
+    }
+  }
+
+  // ==========================================================================
   // Initialize
   // ==========================================================================
 
-  // Log initial state
-  logEvent('info', 'Demo initialized. Try the controls above!');
-
-  // Welcome message (delayed to not interfere with page load)
+  // Welcome message (delayed)
   setTimeout(function () {
     notify.info('Welcome to the a11y-feedback demo! Try the controls to see it in action.', {
       id: 'welcome'
     });
-  }, 1000);
+  }, 500);
 })();
-
