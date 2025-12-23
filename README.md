@@ -8,7 +8,6 @@ A production-grade, framework-agnostic accessibility feedback and announcement e
 
 [![npm version](https://img.shields.io/npm/v/a11y-feedback.svg)](https://www.npmjs.com/package/a11y-feedback)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/WOLFIEEEE/npm-extention/actions/workflows/ci.yml/badge.svg)](https://github.com/WOLFIEEEE/npm-extention/actions/workflows/ci.yml)
 
 ## Installation
 
