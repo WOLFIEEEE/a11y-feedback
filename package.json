@@ -52,16 +52,16 @@
     "feedback",
     "notifications"
   ],
-  "author": "",
+  "author": "WOLFIEEEE",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/WOLFIEEEE/npm-extention.git"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/WOLFIEEEE/npm-extention/issues"
   },
-  "homepage": "",
+  "homepage": "https://github.com/WOLFIEEEE/npm-extention#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
