@@ -1,13 +1,54 @@
-# a11y-feedback
+<p align="center">
+  <img src="https://raw.githubusercontent.com/WOLFIEEEE/npm-extention/main/docs/assets/logo.svg" alt="a11y-feedback" width="120" height="120">
+</p>
 
-A production-grade, framework-agnostic accessibility feedback and announcement engine for the web.
+<h1 align="center">a11y-feedback</h1>
 
-`a11y-feedback` unifies **screen reader announcements**, **semantic feedback (success, error, info, loading)**, **focus management**, and **WCAG-safe timing behavior** under a single, predictable API.
+<p align="center">
+  <strong>Production-grade accessibility feedback engine for the web</strong>
+</p>
 
-**This library exists because `aria-live` alone is not enough.**
+<p align="center">
+  Unified screen reader announcements, semantic feedback, focus management, and WCAG-compliant notifications — all in one predictable API.
+</p>
 
-[![npm version](https://img.shields.io/npm/v/@theaccessibleteam/a11y-feedback.svg)](https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback"><img src="https://img.shields.io/npm/v/@theaccessibleteam/a11y-feedback.svg?style=flat-square&color=6366f1" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback"><img src="https://img.shields.io/npm/dm/@theaccessibleteam/a11y-feedback.svg?style=flat-square&color=22d3ee" alt="npm downloads"></a>
+  <a href="https://github.com/WOLFIEEEE/npm-extention/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
+  <a href="https://bundlephobia.com/package/@theaccessibleteam/a11y-feedback"><img src="https://img.shields.io/bundlephobia/minzip/@theaccessibleteam/a11y-feedback?style=flat-square&color=10b981" alt="Bundle size"></a>
+  <img src="https://img.shields.io/badge/TypeScript-Ready-3178c6?style=flat-square" alt="TypeScript">
+</p>
+
+<p align="center">
+  <a href="https://wolfieeee.github.io/npm-extention/"><strong>🔴 Live Demo</strong></a> · 
+  <a href="#installation">Installation</a> · 
+  <a href="#quick-start">Quick Start</a> · 
+  <a href="#api-reference">API</a> · 
+  <a href="https://github.com/WOLFIEEEE/npm-extention">GitHub</a>
+</p>
+
+---
+
+## Why This Library?
+
+**`aria-live` alone is not enough.**
+
+Most web apps implement feedback using ad-hoc live regions, visual toast libraries, and manual focus hacks. This leads to:
+
+- ❌ Duplicate or missing screen reader announcements
+- ❌ Focus being stolen incorrectly
+- ❌ Over-announcement and cognitive overload
+- ❌ Unintentional WCAG violations
+
+**a11y-feedback** provides a **centralized, accessibility-first feedback layer** that is:
+
+- ✅ **Safe by default** — Correct ARIA semantics enforced
+- ✅ **Hard to misuse** — Focus rules prevent common mistakes  
+- ✅ **Predictable** — Consistent across all screen readers
+- ✅ **Framework-agnostic** — Works with React, Vue, Svelte, or vanilla JS
+
+---
 
 ## Installation
 
@@ -15,18 +56,22 @@ A production-grade, framework-agnostic accessibility feedback and announcement e
 npm install @theaccessibleteam/a11y-feedback
 ```
 
-```bash
-yarn add @theaccessibleteam/a11y-feedback
-```
+<details>
+<summary>Other package managers</summary>
 
 ```bash
+# Yarn
+yarn add @theaccessibleteam/a11y-feedback
+
+# pnpm
 pnpm add @theaccessibleteam/a11y-feedback
 ```
+
+</details>
 
 ### CDN Usage
 
 ```html
-<!-- UMD build for script tags -->
 <script src="https://unpkg.com/@theaccessibleteam/a11y-feedback/dist/a11y-feedback.umd.js"></script>
 <script>
   const { notify } = window.A11yFeedback
@@ -34,67 +79,72 @@ pnpm add @theaccessibleteam/a11y-feedback
 </script>
 ```
 
+---
+
 ## Quick Start
 
 ```typescript
 import { notify } from '@theaccessibleteam/a11y-feedback'
 
-// Basic usage with sugar helpers
+// Sugar helpers for common patterns
 notify.success('Profile updated successfully')
 notify.error('Invalid email address')
-notify.warning('Your session will expire in 5 minutes')
+notify.warning('Session expires in 5 minutes')
 notify.info('New features available')
 notify.loading('Saving changes...')
 ```
 
-## Why This Library Exists
+### Error with Focus Management
 
-Most web applications implement feedback using a combination of:
-- ad-hoc `aria-live` regions
-- visual toast libraries
-- manual focus hacks
-- inconsistent timing and dismissal rules
+```typescript
+notify.error('Please enter a valid email', {
+  focus: '#email',
+  explainFocus: true
+})
+// Screen reader: "Please enter a valid email. Focus moved to Email field."
+```
 
-This leads to:
-- duplicate or missing screen reader announcements
-- focus being stolen incorrectly
-- over-announcement and cognitive overload
-- WCAG violations introduced unintentionally
+### Loading → Success Pattern
 
-`a11y-feedback` provides a **centralized, opinionated, accessibility-first feedback layer** that is:
-- safe by default
-- hard to misuse
-- predictable across screen readers
-- framework-agnostic
+```typescript
+// Start loading
+notify.loading('Saving...', { id: 'save-op' })
 
-## Core Principles
+// Replace with success (same ID)
+notify.success('Saved!', { id: 'save-op' })
+```
 
-1. **Accessibility First** - Screen reader users are the primary audience. Visual UI is optional and secondary.
+### Enable Visual Toasts
 
-2. **Single Source of Truth** - One feedback event controls aria-live announcement, visual feedback, focus behavior, timing and dismissal.
+```typescript
+import { configureFeedback } from '@theaccessibleteam/a11y-feedback'
 
-3. **Correct Semantics, Enforced** - Developers cannot accidentally announce errors politely or move focus on success.
+configureFeedback({
+  visual: true,
+  visualPosition: 'top-right',
+  maxVisualItems: 5
+})
+```
 
-4. **Minimal, Not Simplistic** - Small API surface with powerful internal behavior.
+---
 
-5. **Framework Agnostic** - No React, Vue, or DOM abstraction assumptions.
+## Semantic Mappings (Enforced)
+
+| Type     | ARIA Role | aria-live   | Can Move Focus | Auto-Dismiss |
+|----------|-----------|-------------|----------------|--------------|
+| success  | `status`  | `polite`    | ❌ No          | ✅ Yes       |
+| info     | `status`  | `polite`    | ❌ No          | ✅ Yes       |
+| loading  | `status`  | `polite`    | ❌ No          | ❌ No        |
+| warning  | `alert`   | `assertive` | ✅ Yes         | ✅ Yes       |
+| error    | `alert`   | `assertive` | ✅ Yes         | ❌ No        |
+
+These mappings are **non-configurable** to prevent accessibility misuse.
+
+---
 
 ## API Reference
 
-### Main Functions
-
-```typescript
-import {
-  notify,
-  configureFeedback,
-  enableFeedbackDebug,
-  getFeedbackLog
-} from '@theaccessibleteam/a11y-feedback'
-```
-
 ### notify
-
-The main function for triggering feedback:
 
 ```typescript
 // Base function
@@ -116,204 +166,104 @@ notify.loading(message, options?)
 
 ```typescript
 interface FeedbackOptions {
-  // Unique identifier for deduplication/replacement
-  id?: string
-  
-  // CSS selector for focus target (error/warning only)
-  focus?: string
-  
-  // Announce focus movement to screen readers
-  explainFocus?: boolean
-  
-  // Force re-announcement of identical messages
-  force?: boolean
-  
-  // Auto-dismiss timeout in ms (not for errors)
-  timeout?: number
-  
-  // Custom CSS class for visual feedback
-  className?: string
-  
-  // Callback when dismissed
-  onDismiss?: () => void
+  id?: string           // Unique ID for deduplication/replacement
+  focus?: string        // CSS selector for focus target (error/warning only)
+  explainFocus?: boolean // Announce focus movement
+  force?: boolean       // Force re-announcement of identical messages
+  timeout?: number      // Auto-dismiss timeout in ms
+  className?: string    // Custom CSS class for visual feedback
+  onDismiss?: () => void // Callback when dismissed
 }
 ```
 
 ### configureFeedback
 
-Configure global settings:
-
 ```typescript
+import { configureFeedback } from '@theaccessibleteam/a11y-feedback'
+
 configureFeedback({
-  // Enable visual feedback rendering
-  visual: true,
-  
-  // Default auto-dismiss timeout (ms)
-  defaultTimeout: 5000,
-  
-  // Visual feedback position
+  visual: true,            // Enable visual toasts
+  defaultTimeout: 5000,    // Default auto-dismiss (ms)
   visualPosition: 'top-right',
-  
-  // Max visual items shown
   maxVisualItems: 5,
-  
-  // Enable debug logging
   debug: false
 })
 ```
 
-## Feedback Types & Semantics
-
-| Type     | ARIA Role | aria-live   | Priority | Can Move Focus |
-|----------|-----------|-------------|----------|----------------|
-| success  | status    | polite      | low      | No             |
-| info     | status    | polite      | low      | No             |
-| loading  | status    | polite      | low      | No             |
-| warning  | alert     | assertive   | high     | Yes            |
-| error    | alert     | assertive   | high     | Yes            |
-
-These mappings are **non-configurable** to prevent misuse.
-
-## Usage Examples
-
-### Basic Announcement
+### Debug & Telemetry
 
 ```typescript
-notify.success('Profile updated successfully')
+import { 
+  enableFeedbackDebug, 
+  getFeedbackLog,
+  getFeedbackStats 
+} from '@theaccessibleteam/a11y-feedback'
+
+enableFeedbackDebug()
+
+const log = getFeedbackLog()
+const stats = getFeedbackStats()
 ```
 
-Screen reader: *"Profile updated successfully."*
+---
 
-### Error With Focus Management
+## Features
 
-```typescript
-notify.error('Invalid email address', {
-  focus: '#email',
-  explainFocus: true
-})
-```
+### Focus Safety Rules
 
-Screen reader: *"Invalid email address. Focus moved to Email field."*
+| Rule | Enforced |
+|------|----------|
+| Success must not move focus | ✅ |
+| Info must not move focus | ✅ |
+| Loading must not move focus | ✅ |
+| Warning may move focus | ✅ |
+| Error may move focus | ✅ |
 
-Rules enforced:
-- Errors may move focus
-- Success never steals focus
-- Loading never traps focus
-
-### Loading → Success Replacement
-
-```typescript
-// Start loading
-notify.loading('Saving profile...', { id: 'profile-status' })
-
-// Later, replace with success
-notify.success('Profile saved', { id: 'profile-status' })
-```
-
-Result:
-- Loading announcement is replaced
-- No duplicate or overlapping announcements
-- Visual and SR feedback stay in sync
-
-### Force Re-announcement
-
-Screen readers often ignore repeated identical text:
-
-```typescript
-notify.success('Saved', { force: true })
-```
-
-### Content-Based Deduplication
+### Content Deduplication
 
 Rapid duplicate messages are automatically skipped:
 
 ```typescript
 notify.info('Loading data')
-notify.info('Loading data') // skipped (within 500ms)
+notify.info('Loading data') // Skipped (within 500ms)
 ```
-
-## Visual Feedback
-
-By default, the library is **screen-reader-only**. Enable visual feedback:
-
-```typescript
-configureFeedback({ visual: true })
-```
-
-Visual behavior:
-- Minimal, accessible HTML output
-- Respects `prefers-reduced-motion`
-- Dismissible with keyboard
-- Errors never auto-dismiss
-- Configurable position and max items
-
-### Dismiss Programmatically
-
-```typescript
-import { dismissVisualFeedback, dismissAllVisualFeedback } from '@theaccessibleteam/a11y-feedback'
-
-// Dismiss specific notification
-dismissVisualFeedback('notification-id')
-
-// Dismiss all
-dismissAllVisualFeedback()
-```
-
-## Debug Mode
-
-Enable verbose logging:
-
-```typescript
-import { enableFeedbackDebug, getFeedbackLog, getFeedbackStats } from '@theaccessibleteam/a11y-feedback'
-
-enableFeedbackDebug()
-
-// Get event log
-const log = getFeedbackLog()
-
-// Get statistics
-const stats = getFeedbackStats()
-// { total: 10, byType: { success: 5, error: 2 }, ... }
-```
-
-## Live Region Management
-
-Live regions are **automatically injected** and managed:
-
-- Exactly two regions exist:
-  - polite (`role="status"`, `aria-live="polite"`)
-  - assertive (`role="alert"`, `aria-live="assertive"`)
-- Regions are visually hidden using screen-reader-only CSS
-- `display: none` is never used (breaks screen readers)
 
 ### Re-announcement Engine
 
-Screen readers may ignore repeated identical text. `a11y-feedback` guarantees announcements using:
+Screen readers may ignore repeated identical text. We guarantee announcements using:
+- Content clearing
+- Microtask delay
+- Zero-width character injection
 
-1. Content clearing
-2. Microtask delay
-3. Zero-width character injection
-4. Safe DOM mutation ordering
+### WCAG 2.2 Compliance
 
-## Focus Safety Rules (Enforced)
+- ✅ No critical message auto-dismisses
+- ✅ Configurable timeouts for non-critical feedback  
+- ✅ Users can dismiss visual feedback
+- ✅ Respects `prefers-reduced-motion`
+- ✅ Prevents WCAG 2.2.1 violations
 
-| Rule | Enforced |
-|------|----------|
-| Success must not move focus | ✓ |
-| Info must not move focus | ✓ |
-| Loading must not move focus | ✓ |
-| Warning may move focus | ✓ |
-| Error may move focus | ✓ |
-| Focus movement can be announced | ✓ |
+---
 
-Attempting to move focus on `success`, `info`, or `loading` will be silently ignored and logged in debug mode.
+## Browser Support
 
-## WCAG 2.2 Compliance
+| Browser | Version |
+|---------|---------|
+| Chrome  | 90+     |
+| Firefox | 88+     |
+| Safari  | 14+     |
+| Edge    | 90+     |
 
-- No critical message auto-dismisses
-- Timeouts are configurable for non-critical feedback
-- Users can pause or dismiss visual feedback
-- Prevents violations of WCAG 2.2.1 (Timing Adjustable)
+---
+
+## Bundle Size
+
+- **ESM**: ~23KB (minified)
+- **CJS**: ~19KB (minified)  
+- **UMD**: ~19KB (minified)
+- **Zero dependencies**
+
+---
 
 ## TypeScript Support
 
@@ -329,217 +279,32 @@ import type {
 } from '@theaccessibleteam/a11y-feedback'
 ```
 
-## Browser Support
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-Requires ES2020 support. For older browsers, use a transpiler.
-
-## Bundle Size
-
-- ESM: ~23KB (minified)
-- CJS: ~19KB (minified)
-- UMD: ~19KB (minified)
-- No dependencies
-
----
-
-## Development
-
-### Prerequisites
-
-- Node.js >= 18
-- npm, yarn, or pnpm
-
-### Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/WOLFIEEEE/npm-extention.git
-cd npm-extention
-
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Build the library
-npm run build
-
-# Lint the code
-npm run lint
-
-# Format the code
-npm run format
-
-# Type check
-npm run typecheck
-```
-
-### Project Structure
-
-```
-a11y-feedback/
-├── src/
-│   ├── index.ts              # Public API exports
-│   ├── notify.ts             # Main notify function & sugar helpers
-│   ├── config.ts             # configureFeedback, global state
-│   ├── types.ts              # TypeScript interfaces
-│   ├── constants.ts          # Semantic mappings, timing defaults
-│   ├── modules/
-│   │   ├── announcer.ts      # Core announcement logic
-│   │   ├── regions.ts        # Live region DOM management
-│   │   ├── queue.ts          # Announcement queue & priority
-│   │   ├── focus.ts          # Focus management & safety rules
-│   │   ├── dedupe.ts         # Deduplication & replacement
-│   │   ├── visual.ts         # Visual feedback component
-│   │   └── debug.ts          # Debug mode & telemetry
-│   └── utils/
-│       ├── dom.ts            # DOM helpers
-│       └── timing.ts         # Microtask delays, ZWC injection
-├── tests/                    # Vitest test files
-├── examples/                 # Demo HTML files
-└── dist/                     # Built output (generated)
-```
-
-### Available Scripts
-
-| Script | Description |
-|--------|-------------|
-| `npm run build` | Build ESM, CJS, UMD bundles and type declarations |
-| `npm run test` | Run all tests once |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run lint` | Lint source files with ESLint |
-| `npm run lint:fix` | Lint and auto-fix issues |
-| `npm run format` | Format code with Prettier |
-| `npm run typecheck` | Run TypeScript type checking |
-| `npm run clean` | Remove dist folder |
-
----
-
-## Publishing to npm
-
-### First-time Setup
-
-1. Create an npm account at https://www.npmjs.com/signup
-2. Login to npm from your terminal:
-
-```bash
-npm login
-```
-
-3. Verify you're logged in:
-
-```bash
-npm whoami
-```
-
-### Publishing Steps
-
-1. **Update version** (follow semantic versioning):
-
-```bash
-# Patch release (bug fixes): 1.0.0 → 1.0.1
-npm version patch
-
-# Minor release (new features, backwards compatible): 1.0.0 → 1.1.0
-npm version minor
-
-# Major release (breaking changes): 1.0.0 → 2.0.0
-npm version major
-```
-
-2. **Run quality checks** (automated via `prepublishOnly`):
-
-```bash
-npm run lint
-npm run typecheck
-npm run test
-npm run build
-```
-
-3. **Publish to npm**:
-
-```bash
-npm publish
-```
-
-4. **Push the version tag to GitHub**:
-
-```bash
-git push origin main --tags
-```
-
-### Publishing a Beta/Preview Version
-
-```bash
-# Update version with prerelease tag
-npm version prerelease --preid=beta
-
-# Publish with beta tag (users install via: npm install a11y-feedback@beta)
-npm publish --tag beta
-```
-
-### Unpublishing (Emergency Only)
-
-```bash
-# Unpublish a specific version (within 72 hours of publish)
-npm unpublish a11y-feedback@1.0.1
-
-# Deprecate a version (preferred over unpublish)
-npm deprecate a11y-feedback@1.0.1 "Critical bug, please upgrade to 1.0.2"
-```
-
 ---
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `npm test`
-5. Run linting: `npm run lint`
-6. Commit your changes: `git commit -m 'feat: add amazing feature'`
-7. Push to the branch: `git push origin feature/amazing-feature`
-8. Open a Pull Request
+We welcome contributions! See our [Contributing Guide](https://github.com/WOLFIEEEE/npm-extention#contributing) for details.
 
-### Commit Message Convention
+```bash
+# Clone and install
+git clone https://github.com/WOLFIEEEE/npm-extention.git
+cd npm-extention
+npm install
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat:` - New features
-- `fix:` - Bug fixes
-- `docs:` - Documentation changes
-- `style:` - Code style changes (formatting, etc.)
-- `refactor:` - Code refactoring
-- `test:` - Adding or updating tests
-- `chore:` - Maintenance tasks
-
----
-
-## What This Library Intentionally Does NOT Do
-
-- No animations framework
-- No CSS framework
-- No design system
-- No framework bindings in core
-- No accessibility auditing
+# Development commands
+npm run build    # Build the library
+npm run test     # Run tests
+npm run lint     # Lint code
+```
 
 ---
 
 ## License
 
-MIT
+MIT © [The Accessible Team](https://github.com/WOLFIEEEE)
 
 ---
 
-## Acknowledgments
-
-Built with accessibility in mind, inspired by the need for a unified, safe, and predictable feedback system for screen reader users.
+<p align="center">
+  <sub>Built with ♿ accessibility in mind</sub>
+</p>

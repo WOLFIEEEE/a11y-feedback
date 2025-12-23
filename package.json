@@ -1,10 +1,10 @@
 {
   "name": "@theaccessibleteam/a11y-feedback",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publishConfig": {
     "access": "public"
   },
-  "description": "A production-grade, framework-agnostic accessibility feedback and announcement engine for the web",
+  "description": "Production-grade accessibility feedback engine for the web. Unified screen reader announcements, focus management, and WCAG-compliant notifications.",
   "type": "module",
   "main": "./dist/a11y-feedback.cjs",
   "module": "./dist/a11y-feedback.js",
@@ -24,7 +24,8 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "engines": {
@@ -50,12 +51,19 @@
     "aria-live",
     "screen-reader",
     "wcag",
+    "wcag-2.2",
     "announcements",
     "focus-management",
     "feedback",
-    "notifications"
+    "notifications",
+    "toast",
+    "alerts",
+    "screen-reader-announcements",
+    "assistive-technology",
+    "inclusive-design",
+    "web-accessibility"
   ],
-  "author": "",
+  "author": "The Accessible Team <theaccessibleteam@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -64,7 +72,11 @@
   "bugs": {
     "url": "https://github.com/WOLFIEEEE/npm-extention/issues"
   },
-  "homepage": "https://github.com/WOLFIEEEE/npm-extention#readme",
+  "homepage": "https://wolfieeee.github.io/npm-extention/",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/WOLFIEEEE"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
