@@ -118,15 +118,11 @@ async function processEvent(event: FeedbackEvent): Promise<FeedbackEvent> {
   }
 
   // Log the event
-  logFeedbackEvent(
-    processedEvent,
-    isReplacement ? 'replaced' : 'announced',
-    {
-      region: processedEvent.ariaLive,
-      focusResult,
-      visualShown,
-    }
-  )
+  logFeedbackEvent(processedEvent, isReplacement ? 'replaced' : 'announced', {
+    region: processedEvent.ariaLive,
+    focusResult,
+    visualShown,
+  })
 
   return processedEvent
 }
@@ -173,10 +169,7 @@ async function notifyBase(input: NotifyInput): Promise<FeedbackEvent> {
  * notify.success('Profile updated successfully')
  * ```
  */
-async function notifySuccess(
-  message: string,
-  options?: FeedbackOptions
-): Promise<FeedbackEvent> {
+async function notifySuccess(message: string, options?: FeedbackOptions): Promise<FeedbackEvent> {
   return notifyBase({ message, type: 'success', options })
 }
 
@@ -195,10 +188,7 @@ async function notifySuccess(
  * })
  * ```
  */
-async function notifyError(
-  message: string,
-  options?: FeedbackOptions
-): Promise<FeedbackEvent> {
+async function notifyError(message: string, options?: FeedbackOptions): Promise<FeedbackEvent> {
   return notifyBase({ message, type: 'error', options })
 }
 
@@ -214,10 +204,7 @@ async function notifyError(
  * notify.warning('Your session will expire in 5 minutes')
  * ```
  */
-async function notifyWarning(
-  message: string,
-  options?: FeedbackOptions
-): Promise<FeedbackEvent> {
+async function notifyWarning(message: string, options?: FeedbackOptions): Promise<FeedbackEvent> {
   return notifyBase({ message, type: 'warning', options })
 }
 
@@ -233,10 +220,7 @@ async function notifyWarning(
  * notify.info('New features available')
  * ```
  */
-async function notifyInfo(
-  message: string,
-  options?: FeedbackOptions
-): Promise<FeedbackEvent> {
+async function notifyInfo(message: string, options?: FeedbackOptions): Promise<FeedbackEvent> {
   return notifyBase({ message, type: 'info', options })
 }
 
@@ -256,10 +240,7 @@ async function notifyInfo(
  * notify.success('Profile saved', { id: 'profile-save' })
  * ```
  */
-async function notifyLoading(
-  message: string,
-  options?: FeedbackOptions
-): Promise<FeedbackEvent> {
+async function notifyLoading(message: string, options?: FeedbackOptions): Promise<FeedbackEvent> {
   return notifyBase({ message, type: 'loading', options })
 }
 
@@ -291,4 +272,3 @@ export const notify = Object.assign(notifyBase, {
  * Type for the notify function with helpers
  */
 export type NotifyFunction = typeof notify
-

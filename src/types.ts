@@ -147,7 +147,13 @@ export interface FeedbackConfig {
    * Position of visual feedback container
    * @default 'top-right'
    */
-  readonly visualPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center'
+  readonly visualPosition:
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'top-center'
+    | 'bottom-center'
 
   /**
    * Maximum number of visual feedback items to show at once
@@ -201,8 +207,7 @@ export interface AnnouncerState {
  */
 export function isFeedbackType(value: unknown): value is FeedbackType {
   return (
-    typeof value === 'string' &&
-    ['success', 'error', 'warning', 'info', 'loading'].includes(value)
+    typeof value === 'string' && ['success', 'error', 'warning', 'info', 'loading'].includes(value)
   )
 }
 
@@ -221,4 +226,3 @@ export function isFeedbackOptions(value: unknown): value is FeedbackOptions {
   if (obj['timeout'] !== undefined && typeof obj['timeout'] !== 'number') return false
   return true
 }
-

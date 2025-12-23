@@ -142,4 +142,3 @@ function hasConfigChanged(prev: FeedbackConfig, next: FeedbackConfig): boolean {
   const keys = Object.keys(prev) as Array<keyof FeedbackConfig>
   return keys.some((key) => prev[key] !== next[key])
 }
-

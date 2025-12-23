@@ -542,4 +542,3 @@ export function resetVisual(): void {
   destroyVisual()
   activeItems.clear()
 }
-
