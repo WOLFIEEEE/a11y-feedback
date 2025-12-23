@@ -15,6 +15,14 @@ const DEFAULT_TRANSLATIONS: Required<FeedbackTranslations> = {
   dismiss: 'Dismiss',
   notificationsLabel: 'Notifications',
   focusMovedTo: 'Focus moved to {label}.',
+  // V2.0 translations
+  confirmTitle: 'Confirm',
+  confirm: 'Confirm',
+  cancel: 'Cancel',
+  notificationCenter: 'Notification Center',
+  noNotifications: 'No notifications',
+  markAllRead: 'Mark all as read',
+  clearAll: 'Clear all',
 }
 
 /**

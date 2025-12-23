@@ -118,6 +118,80 @@ export function getRegionPrefix(): string {
   return currentConfig.regionPrefix
 }
 
+// ============================================================================
+// V2.0 Configuration Helpers
+// ============================================================================
+
+/**
+ * Check if sounds are enabled
+ */
+export function isSoundEnabled(): boolean {
+  return currentConfig.sounds?.enabled ?? false
+}
+
+/**
+ * Check if haptics are enabled
+ */
+export function isHapticEnabled(): boolean {
+  return currentConfig.haptics?.enabled ?? false
+}
+
+/**
+ * Check if keyboard navigation is enabled
+ */
+export function isKeyboardEnabled(): boolean {
+  return currentConfig.keyboard?.enabled ?? true
+}
+
+/**
+ * Check if grouping is enabled
+ */
+export function isGroupingEnabled(): boolean {
+  return currentConfig.grouping?.enabled ?? false
+}
+
+/**
+ * Check if history is enabled
+ */
+export function isHistoryEnabled(): boolean {
+  return currentConfig.history?.enabled ?? false
+}
+
+/**
+ * Get sound configuration
+ */
+export function getSoundConfig(): import('./types').SoundConfig | undefined {
+  return currentConfig.sounds
+}
+
+/**
+ * Get haptic configuration
+ */
+export function getHapticConfig(): import('./types').HapticConfig | undefined {
+  return currentConfig.haptics
+}
+
+/**
+ * Get keyboard configuration
+ */
+export function getKeyboardConfig(): import('./types').KeyboardConfig | undefined {
+  return currentConfig.keyboard
+}
+
+/**
+ * Get grouping configuration
+ */
+export function getGroupingConfig(): import('./types').GroupingConfig | undefined {
+  return currentConfig.grouping
+}
+
+/**
+ * Get history configuration
+ */
+export function getHistoryConfig(): import('./types').HistoryConfig | undefined {
+  return currentConfig.history
+}
+
 /**
  * Internal: Notify all config listeners of a change
  */

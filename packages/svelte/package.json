@@ -1,0 +1,53 @@
+{
+  "name": "@theaccessibleteam/a11y-feedback-svelte",
+  "version": "2.0.0",
+  "description": "Svelte bindings for a11y-feedback accessibility notification library",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+  },
+  "peerDependencies": {
+    "svelte": ">=3.0.0 || >=4.0.0 || >=5.0.0"
+  },
+  "dependencies": {
+    "@theaccessibleteam/a11y-feedback": "workspace:*"
+  },
+  "devDependencies": {
+    "svelte": "^4.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "svelte",
+    "a11y",
+    "accessibility",
+    "notifications",
+    "screen-reader",
+    "aria"
+  ],
+  "author": "The Accessible Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WOLFIEEEE/a11y-feedback.git",
+    "directory": "packages/svelte"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
+

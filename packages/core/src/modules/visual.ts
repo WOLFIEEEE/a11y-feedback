@@ -7,12 +7,13 @@
 import type { FeedbackEvent, FeedbackType } from '../types'
 import {
   CSS_CLASSES,
+  CSS_CLASSES_V2,
   DATA_ATTRIBUTES,
   DEFAULT_TIMEOUTS,
   POSITION_STYLES,
   FEEDBACK_SEMANTICS,
 } from '../constants'
-import { getConfig, isVisualEnabled, onConfigChange } from '../config'
+import { getConfig, isVisualEnabled, onConfigChange, isGroupingEnabled } from '../config'
 import {
   createElement,
   applyStyles,
@@ -24,6 +25,14 @@ import {
 import { getTranslation, isRTL } from './i18n'
 import { isNoAutoDismiss } from '../utils/timing'
 import { unregisterEvent } from './dedupe'
+import { renderActions, getActionsCSS, cleanupActionState } from './actions'
+import { renderProgressBar, getProgressCSS, setProgressElement, hasActiveProgress } from './progress'
+import { renderRichContent, getRichContentCSS } from './rich-content'
+import { addToGroup, getGroupForNotification, getGroupingCSS } from './grouping'
+import { playSound } from './sound'
+import { triggerHaptic } from './haptics'
+import { registerNotification, unregisterNotification } from './keyboard'
+import { addToHistory } from './notification-center'
 
 /**
  * Visual feedback container element
@@ -290,7 +299,16 @@ function injectStyles(): void {
     styleElement.setAttribute('nonce', config.cspNonce)
   }
   
-  styleElement.textContent = VISUAL_STYLES
+  // Combine all styles (v1 + v2)
+  const allStyles = [
+    VISUAL_STYLES,
+    getActionsCSS(),
+    getProgressCSS(),
+    getRichContentCSS(),
+    getGroupingCSS(),
+  ].join('\n')
+  
+  styleElement.textContent = allStyles
   document.head.appendChild(styleElement)
 }
 
@@ -366,6 +384,29 @@ export function showVisualFeedback(event: FeedbackEvent): void {
 
   const config = getConfig()
 
+  // Play sound if enabled (v2.0)
+  if (event.options.sound !== false) {
+    playSound(event.type)
+  }
+
+  // Trigger haptic if enabled (v2.0)
+  if (event.options.haptic !== false) {
+    triggerHaptic(event.type)
+  }
+
+  // Add to history (v2.0)
+  addToHistory(event)
+
+  // Check for grouping (v2.0)
+  if (isGroupingEnabled() && event.options.group) {
+    const group = addToGroup(event)
+    if (group && group.notifications.length > 1) {
+      // Update existing group UI instead of adding new item
+      updateGroupUI(group.id)
+      return
+    }
+  }
+
   // Check if we need to remove old items to stay within limit
   while (activeItems.size >= config.maxVisualItems) {
     const firstKey = activeItems.keys().next().value
@@ -386,15 +427,43 @@ export function showVisualFeedback(event: FeedbackEvent): void {
     item.classList.remove(CSS_CLASSES.entering)
   })
 
+  // Auto-focus first action for errors (v2.0)
+  if (event.type === 'error' && event.actions && event.actions.length > 0) {
+    const firstAction = item.querySelector<HTMLButtonElement>('[data-autofocus]')
+    if (firstAction) {
+      setTimeout(() => firstAction.focus(), 100)
+    }
+  }
+
   // Set up auto-dismiss if applicable
   setupAutoDismiss(event)
+}
+
+/**
+ * Update UI for a notification group
+ */
+function updateGroupUI(groupId: string): void {
+  // Find and update existing group element
+  const existingGroup = container?.querySelector(`[data-group-id="${groupId}"]`)
+  
+  if (existingGroup) {
+    // Re-render the group
+    const group = getGroupForNotification(groupId)
+    if (group) {
+      // Update badge count
+      const badge = existingGroup.querySelector(`.${CSS_CLASSES_V2.groupBadge}`)
+      if (badge) {
+        badge.textContent = String(group.notifications.length)
+      }
+    }
+  }
 }
 
 /**
  * Create a visual feedback item element
  */
 function createVisualItem(event: FeedbackEvent): HTMLElement {
-  const { type, message, id } = event
+  const { type, message, id, options, actions, richContent } = event
   const typeClass = getTypeClass(type)
   const icon = ICONS[type]
 
@@ -405,36 +474,72 @@ function createVisualItem(event: FeedbackEvent): HTMLElement {
     class: `${CSS_CLASSES.item} ${typeClass} ${CSS_CLASSES.entering}`,
     role: 'status',
     'aria-live': 'off', // Don't re-announce visually
+    tabindex: '-1', // Allow focus for keyboard navigation
   })
 
-  // Icon
-  const iconWrapper = createElement('span')
-  iconWrapper.innerHTML = icon
-  item.appendChild(iconWrapper)
+  // Make focusable for keyboard navigation
+  item.setAttribute('tabindex', '0')
 
-  // Content
-  const content = createElement('span', {
-    'data-content': '',
-  })
-  content.textContent = message
-  item.appendChild(content)
+  // Check if we have rich content
+  if (richContent) {
+    // Use rich content rendering
+    const richContentEl = renderRichContent(richContent, message)
+    item.appendChild(richContentEl)
+  } else {
+    // Icon
+    const iconWrapper = createElement('span')
+    iconWrapper.innerHTML = icon
+    item.appendChild(iconWrapper)
 
-  // Dismiss button
-  const dismissButton = createElement('button', {
-    type: 'button',
-    class: CSS_CLASSES.dismissButton,
-    'aria-label': getTranslation('dismiss'),
-  })
-  dismissButton.innerHTML = CLOSE_ICON
-  dismissButton.addEventListener('click', () => {
-    dismissVisualFeedback(id)
-  })
-  item.appendChild(dismissButton)
+    // Content
+    const content = createElement('span', {
+      'data-content': '',
+      class: 'a11y-feedback-content',
+    })
+    content.textContent = message
+    item.appendChild(content)
+  }
+
+  // Progress bar for loading type
+  if (type === 'loading' && hasActiveProgress(id)) {
+    const progressBar = renderProgressBar(id)
+    item.appendChild(progressBar)
+    setProgressElement(id, item)
+  }
+
+  // Action buttons (v2.0)
+  const eventActions = actions || options.actions
+  if (eventActions && eventActions.length > 0) {
+    const actionsContainer = renderActions(
+      eventActions,
+      id,
+      event,
+      () => dismissVisualFeedback(id)
+    )
+    item.appendChild(actionsContainer)
+  }
+
+  // Dismiss button (only if no actions or not an error)
+  if (!eventActions || eventActions.length === 0 || type !== 'error') {
+    const dismissButton = createElement('button', {
+      type: 'button',
+      class: CSS_CLASSES.dismissButton,
+      'aria-label': getTranslation('dismiss'),
+    })
+    dismissButton.innerHTML = CLOSE_ICON
+    dismissButton.addEventListener('click', () => {
+      dismissVisualFeedback(id)
+    })
+    item.appendChild(dismissButton)
+  }
 
   // Add custom class if provided
-  if (event.options.className !== undefined && event.options.className !== '') {
-    item.classList.add(event.options.className)
+  if (options.className !== undefined && options.className !== '') {
+    item.classList.add(options.className)
   }
+
+  // Register for keyboard navigation
+  registerNotification(id)
 
   return item
 }
@@ -511,6 +616,10 @@ export function dismissVisualFeedback(id: string): void {
 
     // Also unregister from dedupe
     unregisterEvent(id)
+
+    // V2.0 cleanup
+    cleanupActionState(id)
+    unregisterNotification(id)
 
     // Call onDismiss callback if provided
     // Note: We need to find the event to get the callback
