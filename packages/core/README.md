@@ -30,6 +30,20 @@
 
 ---
 
+## ✨ What's New in v2.0
+
+- 🎯 **Action Buttons** — Interactive buttons within notifications
+- 📊 **Progress Notifications** — Built-in progress bars for uploads/downloads
+- 💬 **Accessible Dialogs** — Promise-based `confirm()` and `prompt()`
+- 📝 **Notification Templates** — Reusable notification patterns
+- 🎨 **Rich Content** — Icons, styled text, and links
+- 🔔 **Sound & Haptic Feedback** — Optional audio and vibration
+- 📋 **Notification Center** — History panel for past notifications
+- ⌨️ **Keyboard Navigation** — Full keyboard support
+- 🔗 **Framework Bindings** — React, Vue, Svelte, and Angular packages
+
+---
+
 ## Why This Library?
 
 **`aria-live` alone is not enough.**
@@ -46,7 +60,7 @@ Most web apps implement feedback using ad-hoc live regions, visual toast librari
 - ✅ **Safe by default** — Correct ARIA semantics enforced
 - ✅ **Hard to misuse** — Focus rules prevent common mistakes  
 - ✅ **Predictable** — Consistent across all screen readers
-- ✅ **Framework-agnostic** — Works with React, Vue, Svelte, or vanilla JS
+- ✅ **Framework-agnostic** — Works with React, Vue, Svelte, Angular, or vanilla JS
 
 ---
 
@@ -128,6 +142,60 @@ configureFeedback({
 
 ---
 
+## v2.0 Features
+
+### Action Buttons
+
+```typescript
+notify.success('Item deleted', {
+  actions: [
+    { label: 'Undo', onClick: () => restoreItem(), variant: 'primary' }
+  ]
+})
+```
+
+### Progress Notifications
+
+```typescript
+import { notify, updateProgress } from '@theaccessibleteam/a11y-feedback'
+
+notify.info('Uploading...', {
+  id: 'upload',
+  progress: { value: 0, max: 100 }
+})
+
+updateProgress('upload', 50) // 50%
+```
+
+### Accessible Dialogs
+
+```typescript
+import { confirm, prompt } from '@theaccessibleteam/a11y-feedback'
+
+const confirmed = await confirm({
+  title: 'Delete Item?',
+  message: 'This action cannot be undone.'
+})
+
+const result = await prompt({
+  title: 'Rename File',
+  defaultValue: 'document.pdf'
+})
+```
+
+### Sound & Haptics
+
+```typescript
+configureFeedback({
+  enableSound: true,
+  enableHaptics: true
+})
+
+notify.error('Error!', { sound: true, haptic: true })
+```
+
+---
+
 ## Semantic Mappings (Enforced)
 
 | Type     | ARIA Role | aria-live   | Can Move Focus | Auto-Dismiss |
@@ -142,17 +210,24 @@ These mappings are **non-configurable** to prevent accessibility misuse.
 
 ---
 
+## Framework Bindings
+
+| Package | Install |
+|---------|---------|
+| React | `npm i @theaccessibleteam/a11y-feedback-react` |
+| Vue | `npm i @theaccessibleteam/a11y-feedback-vue` |
+| Svelte | `npm i @theaccessibleteam/a11y-feedback-svelte` |
+| Angular | `npm i @theaccessibleteam/a11y-feedback-angular` |
+
+---
+
 ## API Reference
 
 ### notify
 
 ```typescript
 // Base function
-notify({
-  message: 'Hello',
-  type: 'info',
-  options: { id: 'my-notification' }
-})
+notify({ message: 'Hello', type: 'info', options: { id: 'my-id' } })
 
 // Sugar helpers (recommended)
 notify.success(message, options?)
@@ -166,26 +241,32 @@ notify.loading(message, options?)
 
 ```typescript
 interface FeedbackOptions {
-  id?: string           // Unique ID for deduplication/replacement
-  focus?: string        // CSS selector for focus target (error/warning only)
-  explainFocus?: boolean // Announce focus movement
-  force?: boolean       // Force re-announcement of identical messages
-  timeout?: number      // Auto-dismiss timeout in ms
-  className?: string    // Custom CSS class for visual feedback
-  onDismiss?: () => void // Callback when dismissed
+  id?: string                     // Unique ID for deduplication/replacement
+  focus?: string                  // CSS selector for focus target
+  explainFocus?: boolean          // Announce focus movement
+  force?: boolean                 // Force re-announcement
+  timeout?: number                // Auto-dismiss timeout in ms
+  className?: string              // Custom CSS class
+  onDismiss?: () => void          // Callback when dismissed
+  actions?: NotificationAction[]  // Action buttons
+  progress?: ProgressOptions      // Progress bar
+  richContent?: RichContent       // Rich content (icons, links)
+  sound?: boolean                 // Play sound
+  haptic?: boolean                // Trigger haptic feedback
 }
 ```
 
 ### configureFeedback
 
 ```typescript
-import { configureFeedback } from '@theaccessibleteam/a11y-feedback'
-
 configureFeedback({
-  visual: true,            // Enable visual toasts
-  defaultTimeout: 5000,    // Default auto-dismiss (ms)
+  visual: true,
+  defaultTimeout: 5000,
   visualPosition: 'top-right',
   maxVisualItems: 5,
+  enableSound: false,
+  enableHaptics: false,
+  locale: 'en',
   debug: false
 })
 ```
@@ -207,44 +288,6 @@ const stats = getFeedbackStats()
 
 ---
 
-## Features
-
-### Focus Safety Rules
-
-| Rule | Enforced |
-|------|----------|
-| Success must not move focus | ✅ |
-| Info must not move focus | ✅ |
-| Loading must not move focus | ✅ |
-| Warning may move focus | ✅ |
-| Error may move focus | ✅ |
-
-### Content Deduplication
-
-Rapid duplicate messages are automatically skipped:
-
-```typescript
-notify.info('Loading data')
-notify.info('Loading data') // Skipped (within 500ms)
-```
-
-### Re-announcement Engine
-
-Screen readers may ignore repeated identical text. We guarantee announcements using:
-- Content clearing
-- Microtask delay
-- Zero-width character injection
-
-### WCAG 2.2 Compliance
-
-- ✅ No critical message auto-dismisses
-- ✅ Configurable timeouts for non-critical feedback  
-- ✅ Users can dismiss visual feedback
-- ✅ Respects `prefers-reduced-motion`
-- ✅ Prevents WCAG 2.2.1 violations
-
----
-
 ## Browser Support
 
 | Browser | Version |
@@ -258,9 +301,10 @@ Screen readers may ignore repeated identical text. We guarantee announcements us
 
 ## Bundle Size
 
-- **ESM**: ~23KB (minified)
-- **CJS**: ~19KB (minified)  
-- **UMD**: ~19KB (minified)
+- **ESM**: ~86KB (minified)
+- **CJS**: ~72KB (minified)  
+- **UMD**: ~72KB (minified)
+- **Gzipped**: ~22KB
 - **Zero dependencies**
 
 ---
@@ -275,7 +319,11 @@ import type {
   FeedbackOptions,
   FeedbackEvent,
   FeedbackConfig,
-  FeedbackLogEntry
+  NotificationAction,
+  ProgressOptions,
+  RichContent,
+  ConfirmOptions,
+  PromptOptions
 } from '@theaccessibleteam/a11y-feedback'
 ```
 
@@ -283,18 +331,16 @@ import type {
 
 ## Contributing
 
-We welcome contributions! See our [Contributing Guide](https://github.com/WOLFIEEEE/a11y-feedback#contributing) for details.
+We welcome contributions! See our [Contributing Guide](https://github.com/WOLFIEEEE/a11y-feedback/blob/main/CONTRIBUTING.md) for details.
 
 ```bash
-# Clone and install
 git clone https://github.com/WOLFIEEEE/a11y-feedback.git
 cd a11y-feedback
-npm install
+pnpm install
 
-# Development commands
-npm run build    # Build the library
-npm run test     # Run tests
-npm run lint     # Lint code
+pnpm build    # Build the library
+pnpm test     # Run tests
+pnpm lint     # Lint code
 ```
 
 ---

@@ -22,13 +22,27 @@
 </p>
 
 <p align="center">
-  <a href="https://wolfieeee.github.io/a11y-feedback/"><strong>Live Demo</strong></a> · 
+  <a href="https://wolfieeee.github.io/a11y-feedback/"><strong>🔴 Live Demo</strong></a> · 
   <a href="#installation">Installation</a> · 
   <a href="#quick-start">Quick Start</a> · 
   <a href="#framework-integration">Frameworks</a> · 
   <a href="#api-reference">API</a> · 
   <a href="https://github.com/WOLFIEEEE/a11y-feedback">GitHub</a>
 </p>
+
+---
+
+## ✨ What's New in v2.0
+
+- 🎯 **Action Buttons** — Interactive buttons within notifications (Undo, Retry, View)
+- 📊 **Progress Notifications** — Built-in progress bars for uploads/downloads
+- 💬 **Accessible Dialogs** — Promise-based `confirm()` and `prompt()` dialogs
+- 📝 **Notification Templates** — Reusable templates for common patterns
+- 🎨 **Rich Content** — Icons, styled text, and links in notifications
+- 🔔 **Sound & Haptic Feedback** — Optional audio and vibration cues
+- 📋 **Notification Center** — History panel for past notifications
+- ⌨️ **Keyboard Navigation** — Full keyboard support for all interactions
+- 🔗 **Svelte & Angular Bindings** — Official framework packages
 
 ---
 
@@ -137,17 +151,182 @@ configureFeedback({
 
 ---
 
+## v2.0 Features
+
+### Action Buttons
+
+Add interactive buttons to notifications for quick actions:
+
+```typescript
+notify.success('Item deleted', {
+  actions: [
+    {
+      label: 'Undo',
+      onClick: () => restoreItem(),
+      variant: 'primary'
+    },
+    {
+      label: 'View Trash',
+      onClick: () => openTrash(),
+      variant: 'secondary'
+    }
+  ]
+})
+```
+
+### Progress Notifications
+
+Show progress for long-running operations:
+
+```typescript
+import { notify, updateProgress } from '@theaccessibleteam/a11y-feedback'
+
+// Start upload with progress
+const event = notify.info('Uploading file...', {
+  id: 'upload',
+  progress: { value: 0, max: 100, label: 'Upload progress' }
+})
+
+// Update progress
+updateProgress('upload', 50)  // 50%
+updateProgress('upload', 100) // Complete
+
+// Replace with success
+notify.success('Upload complete!', { id: 'upload' })
+```
+
+### Accessible Dialogs
+
+Promise-based confirm and prompt dialogs:
+
+```typescript
+import { confirm, prompt } from '@theaccessibleteam/a11y-feedback'
+
+// Confirm dialog
+const confirmed = await confirm({
+  title: 'Delete Item?',
+  message: 'This action cannot be undone.',
+  confirmLabel: 'Delete',
+  cancelLabel: 'Cancel',
+  type: 'warning'
+})
+
+if (confirmed) {
+  deleteItem()
+}
+
+// Prompt dialog
+const result = await prompt({
+  title: 'Rename File',
+  message: 'Enter a new name:',
+  defaultValue: 'document.pdf',
+  placeholder: 'Enter filename...'
+})
+
+if (result.confirmed && result.value) {
+  renameFile(result.value)
+}
+```
+
+### Notification Templates
+
+Create reusable notification patterns:
+
+```typescript
+import { createTemplate } from '@theaccessibleteam/a11y-feedback'
+
+// Define a template
+const saveTemplate = createTemplate({
+  type: 'success',
+  actions: [{ label: 'View', onClick: () => openItem() }],
+  timeout: 5000
+})
+
+// Use the template
+saveTemplate('Document saved!')
+saveTemplate('Settings updated!')
+```
+
+### Rich Content
+
+Add icons, styled text, and links:
+
+```typescript
+notify.info('Update available', {
+  richContent: {
+    icon: '🚀',
+    html: 'Version <strong>2.0</strong> is available with <em>new features</em>!',
+    link: {
+      text: 'View changelog',
+      url: '/changelog',
+      external: false
+    }
+  }
+})
+```
+
+### Sound & Haptic Feedback
+
+Enable audio and vibration cues:
+
+```typescript
+import { configureFeedback, playSound, triggerHapticFeedback } from '@theaccessibleteam/a11y-feedback'
+
+// Enable globally
+configureFeedback({
+  enableSound: true,
+  enableHaptics: true
+})
+
+// Per-notification
+notify.error('Connection lost', {
+  sound: true,
+  haptic: true
+})
+
+// Manual triggers
+playSound('error')
+triggerHapticFeedback('error')
+```
+
+### Notification Center
+
+Access notification history:
+
+```typescript
+import { 
+  openNotificationCenter, 
+  closeNotificationCenter,
+  getNotificationHistory,
+  clearNotificationHistory 
+} from '@theaccessibleteam/a11y-feedback'
+
+// Enable notification center
+configureFeedback({
+  notificationCenter: {
+    enabled: true,
+    maxHistory: 50
+  }
+})
+
+// Open/close programmatically
+openNotificationCenter()
+closeNotificationCenter()
+
+// Access history
+const history = getNotificationHistory()
+clearNotificationHistory()
+```
+
+---
+
 ## Framework Integration
 
 ### React
 
-Install the React bindings:
-
 ```bash
 npm install @theaccessibleteam/a11y-feedback @theaccessibleteam/a11y-feedback-react
 ```
-
-**Using the Hook (Recommended)**
 
 ```tsx
 import { useA11yFeedback } from '@theaccessibleteam/a11y-feedback-react'
@@ -198,13 +377,9 @@ function MyComponent() {
 
 ### Vue 3
 
-Install the Vue bindings:
-
 ```bash
 npm install @theaccessibleteam/a11y-feedback @theaccessibleteam/a11y-feedback-vue
 ```
-
-**Using the Composable**
 
 ```vue
 <script setup lang="ts">
@@ -233,22 +408,75 @@ async function handleSubmit() {
 </template>
 ```
 
-**Using the Plugin**
+### Svelte
+
+```bash
+npm install @theaccessibleteam/a11y-feedback @theaccessibleteam/a11y-feedback-svelte
+```
+
+```svelte
+<script lang="ts">
+import { useA11yFeedback } from '@theaccessibleteam/a11y-feedback-svelte'
+import { configureFeedback } from '@theaccessibleteam/a11y-feedback'
+
+configureFeedback({ visual: true })
+
+const feedback = useA11yFeedback()
+
+async function handleClick() {
+  feedback.loading('Processing...', { id: 'action' })
+  
+  try {
+    await doSomething()
+    feedback.success('Done!', { id: 'action' })
+  } catch (e) {
+    feedback.error('Failed', { id: 'action' })
+  }
+}
+</script>
+
+<button on:click={handleClick}>Click me</button>
+```
+
+### Angular
+
+```bash
+npm install @theaccessibleteam/a11y-feedback @theaccessibleteam/a11y-feedback-angular
+```
 
 ```typescript
-// main.ts
-import { createApp } from 'vue'
-import { a11yFeedbackPlugin } from '@theaccessibleteam/a11y-feedback-vue'
-import App from './App.vue'
+// app.module.ts
+import { A11yFeedbackModule } from '@theaccessibleteam/a11y-feedback-angular'
 
-const app = createApp(App)
-
-app.use(a11yFeedbackPlugin, {
-  config: { visual: true, visualPosition: 'top-right' },
-  debug: import.meta.env.DEV
+@NgModule({
+  imports: [
+    A11yFeedbackModule.forRoot({ visual: true })
+  ]
 })
+export class AppModule {}
 
-app.mount('#app')
+// component.ts
+import { Component } from '@angular/core'
+import { A11yFeedbackService } from '@theaccessibleteam/a11y-feedback-angular'
+
+@Component({
+  selector: 'app-my-component',
+  template: `<button (click)="handleClick()">Save</button>`
+})
+export class MyComponent {
+  constructor(private feedback: A11yFeedbackService) {}
+
+  async handleClick() {
+    this.feedback.loading('Saving...', { id: 'save' })
+    
+    try {
+      await this.save()
+      this.feedback.success('Saved!', { id: 'save' })
+    } catch (e) {
+      this.feedback.error('Failed to save', { id: 'save' })
+    }
+  }
+}
 ```
 
 ### Vanilla JavaScript
@@ -263,19 +491,26 @@ app.mount('#app')
   <button id="save-btn">Save</button>
   
   <script>
-    const { notify, configureFeedback } = window.A11yFeedback
+    const { notify, configureFeedback, confirm } = window.A11yFeedback
     
     // Enable visual toasts
-    configureFeedback({ visual: true })
+    configureFeedback({ visual: true, enableSound: true })
     
     document.getElementById('save-btn').addEventListener('click', async () => {
-      notify.loading('Saving...', { id: 'save' })
+      const confirmed = await confirm({
+        title: 'Save Changes?',
+        message: 'Do you want to save your changes?'
+      })
       
-      try {
-        await fetch('/api/save', { method: 'POST' })
-        notify.success('Saved!', { id: 'save' })
-      } catch (e) {
-        notify.error('Failed to save', { id: 'save' })
+      if (confirmed) {
+        notify.loading('Saving...', { id: 'save' })
+        
+        try {
+          await fetch('/api/save', { method: 'POST' })
+          notify.success('Saved!', { id: 'save' })
+        } catch (e) {
+          notify.error('Failed to save', { id: 'save' })
+        }
       }
     })
   </script>
@@ -330,13 +565,22 @@ notify.loading(message, options?)
 
 ```typescript
 interface FeedbackOptions {
-  id?: string           // Unique ID for deduplication/replacement
-  focus?: string        // CSS selector for focus target (error/warning only)
-  explainFocus?: boolean // Announce "Focus moved to [element]"
-  force?: boolean       // Force re-announcement of identical messages
-  timeout?: number      // Auto-dismiss timeout in ms (not for errors)
-  className?: string    // Custom CSS class for visual feedback
-  onDismiss?: () => void // Callback when dismissed
+  // Core
+  id?: string               // Unique ID for deduplication/replacement
+  focus?: string            // CSS selector for focus target (error/warning only)
+  explainFocus?: boolean    // Announce "Focus moved to [element]"
+  force?: boolean           // Force re-announcement of identical messages
+  timeout?: number          // Auto-dismiss timeout in ms (not for errors)
+  className?: string        // Custom CSS class for visual feedback
+  onDismiss?: () => void    // Callback when dismissed
+  
+  // v2.0 Features
+  actions?: NotificationAction[]  // Interactive buttons
+  progress?: ProgressOptions      // Progress bar configuration
+  richContent?: RichContent       // Icons, styled text, links
+  sound?: boolean                 // Play sound for this notification
+  haptic?: boolean                // Trigger haptic feedback
+  group?: string                  // Group notifications together
 }
 ```
 
@@ -346,18 +590,33 @@ interface FeedbackOptions {
 import { configureFeedback } from '@theaccessibleteam/a11y-feedback'
 
 configureFeedback({
+  // Visual feedback
   visual: true,                    // Enable visual toasts
   defaultTimeout: 5000,            // Default auto-dismiss (ms)
   visualPosition: 'top-right',     // Position: top-left, top-right, bottom-left, bottom-right, top-center, bottom-center
   maxVisualItems: 5,               // Max visible toasts
-  debug: false,                    // Enable console logging
-  cspNonce: 'abc123',              // CSP nonce for style injection
-  locale: 'en',                    // i18n locale
+  
+  // Sound & haptics
+  enableSound: false,              // Enable sound feedback
+  enableHaptics: false,            // Enable haptic feedback
+  
+  // Notification center
+  notificationCenter: {
+    enabled: true,
+    maxHistory: 50
+  },
+  
+  // i18n
+  locale: 'en',                    // Locale: en, es, fr, de, it, pt, ja, zh, ko, ar, he
   rtl: 'auto',                     // RTL support: true, false, 'auto'
   translations: {                  // Custom translations
     dismiss: 'Close',
     notificationsLabel: 'Alerts'
-  }
+  },
+  
+  // Advanced
+  debug: false,                    // Enable console logging
+  cspNonce: 'abc123'               // CSP nonce for style injection
 })
 ```
 
@@ -536,100 +795,107 @@ async function validateForm(form: HTMLFormElement) {
 }
 ```
 
-### Async Operations with Loading State
+### File Upload with Progress
 
 ```typescript
-async function fetchData() {
-  const operationId = 'fetch-data'
+import { notify, updateProgress } from '@theaccessibleteam/a11y-feedback'
+
+async function uploadFile(file: File) {
+  const uploadId = 'file-upload'
   
-  notify.loading('Loading data...', { id: operationId })
+  notify.info(`Uploading ${file.name}...`, {
+    id: uploadId,
+    progress: { value: 0, max: 100, label: 'Upload progress' }
+  })
   
-  try {
-    const response = await fetch('/api/data')
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
+  const xhr = new XMLHttpRequest()
+  
+  xhr.upload.addEventListener('progress', (e) => {
+    if (e.lengthComputable) {
+      const percent = Math.round((e.loaded / e.total) * 100)
+      updateProgress(uploadId, percent)
     }
-    
-    const data = await response.json()
-    notify.success(`Loaded ${data.items.length} items`, { id: operationId })
-    return data
-    
-  } catch (error) {
-    notify.error('Failed to load data. Please try again.', { 
-      id: operationId,
-      onDismiss: () => console.log('User acknowledged error')
-    })
-    throw error
-  }
-}
-```
-
-### Toast Queue with Rate Limiting
-
-```typescript
-import { notify, configureFeedback } from '@theaccessibleteam/a11y-feedback'
-
-configureFeedback({
-  visual: true,
-  maxVisualItems: 3  // Only show 3 at a time
-})
-
-// Rapid notifications are automatically deduplicated
-for (let i = 0; i < 10; i++) {
-  notify.info('Processing item...') // Only announced once
-}
-
-// Use force to bypass deduplication
-notify.info('Retry attempt', { force: true })
-```
-
-### Multi-Step Wizard
-
-```typescript
-const wizardSteps = ['Personal Info', 'Address', 'Payment', 'Review']
-
-function goToStep(stepIndex: number) {
-  const stepName = wizardSteps[stepIndex]
-  
-  // Announce step change
-  notify.info(`Step ${stepIndex + 1} of ${wizardSteps.length}: ${stepName}`, {
-    id: 'wizard-step'  // Replace previous step announcement
   })
   
-  // Focus first field
-  const firstField = document.querySelector(`#step-${stepIndex} input, #step-${stepIndex} select`)
-  firstField?.focus()
+  xhr.addEventListener('load', () => {
+    if (xhr.status === 200) {
+      notify.success(`${file.name} uploaded successfully!`, { 
+        id: uploadId,
+        actions: [{ label: 'View', onClick: () => openFile(file) }]
+      })
+    } else {
+      notify.error(`Failed to upload ${file.name}`, { id: uploadId })
+    }
+  })
+  
+  xhr.open('POST', '/api/upload')
+  xhr.send(file)
 }
 ```
 
-### Real-Time Updates
+### Undo Pattern
 
 ```typescript
-import { notify, onFeedback } from '@theaccessibleteam/a11y-feedback'
+import { notify } from '@theaccessibleteam/a11y-feedback'
 
-// Track announcements for analytics
-onFeedback('announced', ({ event }) => {
-  gtag('event', 'accessibility_announcement', {
-    type: event.type,
-    message: event.message.substring(0, 100)
+function deleteItem(item: Item) {
+  // Temporarily remove from UI
+  hideItem(item.id)
+  
+  let undone = false
+  const timeoutId = setTimeout(() => {
+    if (!undone) {
+      permanentlyDelete(item.id)
+    }
+  }, 5000)
+  
+  notify.success(`"${item.name}" deleted`, {
+    id: `delete-${item.id}`,
+    timeout: 5000,
+    actions: [
+      {
+        label: 'Undo',
+        onClick: () => {
+          undone = true
+          clearTimeout(timeoutId)
+          showItem(item.id)
+          notify.info(`"${item.name}" restored`, { id: `delete-${item.id}` })
+        },
+        variant: 'primary'
+      }
+    ]
   })
-})
+}
+```
 
-// WebSocket message handling
-socket.on('message', (data) => {
-  switch (data.type) {
-    case 'new-order':
-      notify.success(`New order #${data.orderId} received`)
-      break
-    case 'low-stock':
-      notify.warning(`Low stock: ${data.product} (${data.quantity} left)`)
-      break
-    case 'system-error':
-      notify.error(data.message, { focus: '#status-panel' })
-      break
+### Confirmation Before Dangerous Action
+
+```typescript
+import { confirm, notify } from '@theaccessibleteam/a11y-feedback'
+
+async function handleDeleteAccount() {
+  const confirmed = await confirm({
+    title: 'Delete Account?',
+    message: 'This will permanently delete your account and all data. This cannot be undone.',
+    confirmLabel: 'Delete My Account',
+    cancelLabel: 'Keep Account',
+    type: 'error'
+  })
+  
+  if (confirmed) {
+    notify.loading('Deleting account...', { id: 'delete-account' })
+    
+    try {
+      await deleteAccount()
+      notify.success('Account deleted. Goodbye!', { id: 'delete-account' })
+      redirectToHome()
+    } catch (error) {
+      notify.error('Failed to delete account. Please try again.', { 
+        id: 'delete-account' 
+      })
+    }
   }
-})
+}
 ```
 
 ### SSR/SSG Compatibility
@@ -656,9 +922,12 @@ if (typeof window !== 'undefined') {
 | **Focus Management** | Enforced rules | None | None | None |
 | **WCAG Compliance** | Automatic | Manual | Manual | Manual |
 | **Deduplication** | Built-in | None | None | None |
+| **Action Buttons** | Built-in | Plugin | Built-in | None |
+| **Progress Bars** | Built-in | None | None | None |
+| **Dialogs** | Built-in | None | None | None |
 | **Framework** | Any | React only | React only | React only |
 | **Zero Dependencies** | Yes | No | No | No |
-| **Bundle Size** | ~8KB gzip | ~14KB | ~4KB | ~5KB |
+| **Bundle Size** | ~22KB gzip | ~14KB | ~4KB | ~5KB |
 | **TypeScript** | Full | Full | Full | Full |
 | **RTL Support** | Built-in | Manual | Manual | Manual |
 | **i18n** | Built-in | Manual | Manual | Manual |
@@ -688,12 +957,18 @@ Full TypeScript support with strict types:
 
 ```typescript
 import type {
-  FeedbackType,        // 'success' | 'error' | 'warning' | 'info' | 'loading'
-  FeedbackOptions,     // Options for notify calls
-  FeedbackEvent,       // Event object returned from notify
-  FeedbackConfig,      // Configuration options
-  FeedbackLogEntry,    // Debug log entry
-  FeedbackTranslations // i18n translations
+  FeedbackType,          // 'success' | 'error' | 'warning' | 'info' | 'loading'
+  FeedbackOptions,       // Options for notify calls
+  FeedbackEvent,         // Event object returned from notify
+  FeedbackConfig,        // Configuration options
+  FeedbackLogEntry,      // Debug log entry
+  FeedbackTranslations,  // i18n translations
+  NotificationAction,    // Action button configuration
+  ProgressOptions,       // Progress bar options
+  RichContent,           // Rich content options
+  ConfirmOptions,        // Confirm dialog options
+  PromptOptions,         // Prompt dialog options
+  NotificationTemplate   // Template definition
 } from '@theaccessibleteam/a11y-feedback'
 ```
 
@@ -741,13 +1016,13 @@ We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for deta
 # Clone and install
 git clone https://github.com/WOLFIEEEE/a11y-feedback.git
 cd a11y-feedback
-npm install
+pnpm install
 
 # Development
-npm run dev       # Start dev server
-npm run build     # Build library
-npm run test      # Run tests
-npm run lint      # Lint code
+pnpm dev       # Start dev server
+pnpm build     # Build library
+pnpm test      # Run tests
+pnpm lint      # Lint code
 ```
 
 ---
