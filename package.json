@@ -40,10 +40,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/WOLFIEEEE/npm-extention.git"
+    "url": "git+https://github.com/WOLFIEEEE/a11y-feedback.git"
   },
   "bugs": {
-    "url": "https://github.com/WOLFIEEEE/npm-extention/issues"
+    "url": "https://github.com/WOLFIEEEE/a11y-feedback/issues"
   },
-  "homepage": "https://wolfieeee.github.io/npm-extention/"
+  "homepage": "https://wolfieeee.github.io/a11y-feedback/"
 }

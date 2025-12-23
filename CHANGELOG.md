@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.1] - 2024-12-23
 
 ### Added
-- Live demo site at https://wolfieeee.github.io/npm-extention/
+- Live demo site at https://wolfieeee.github.io/a11y-feedback/
 - Interactive examples for all notification types
 - Visual feedback toggle demo
 - Focus management demonstration
@@ -46,5 +46,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[1.0.1]: https://github.com/WOLFIEEEE/npm-extention/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/WOLFIEEEE/npm-extention/releases/tag/v1.0.0
+[1.0.1]: https://github.com/WOLFIEEEE/a11y-feedback/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/WOLFIEEEE/a11y-feedback/releases/tag/v1.0.0

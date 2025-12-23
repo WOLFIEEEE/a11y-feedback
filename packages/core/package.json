@@ -1,6 +1,6 @@
 {
   "name": "@theaccessibleteam/a11y-feedback",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -60,13 +60,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/WOLFIEEEE/npm-extention.git",
+    "url": "git+https://github.com/WOLFIEEEE/a11y-feedback.git",
     "directory": "packages/core"
   },
   "bugs": {
-    "url": "https://github.com/WOLFIEEEE/npm-extention/issues"
+    "url": "https://github.com/WOLFIEEEE/a11y-feedback/issues"
   },
-  "homepage": "https://wolfieeee.github.io/npm-extention/",
+  "homepage": "https://wolfieeee.github.io/a11y-feedback/",
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/WOLFIEEEE"

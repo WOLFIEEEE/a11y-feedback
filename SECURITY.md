@@ -20,7 +20,7 @@ We take security vulnerabilities seriously. If you discover a security issue in 
 Instead, please report them via one of the following methods:
 
 1. **Email**: Send details to [theaccessibleteam@gmail.com](mailto:theaccessibleteam@gmail.com)
-2. **GitHub Security Advisories**: Use the [private vulnerability reporting](https://github.com/WOLFIEEEE/npm-extention/security/advisories/new) feature
+2. **GitHub Security Advisories**: Use the [private vulnerability reporting](https://github.com/WOLFIEEEE/a11y-feedback/security/advisories/new) feature
 
 ### What to Include
 

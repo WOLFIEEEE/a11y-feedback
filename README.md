@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/WOLFIEEEE/npm-extention/main/docs/assets/logo.svg" alt="a11y-feedback" width="120" height="120">
+  <img src="https://raw.githubusercontent.com/WOLFIEEEE/a11y-feedback/main/docs/assets/logo.svg" alt="a11y-feedback" width="120" height="120">
 </p>
 
 <h1 align="center">a11y-feedback</h1>
@@ -15,19 +15,19 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback"><img src="https://img.shields.io/npm/v/@theaccessibleteam/a11y-feedback.svg?style=flat-square&color=6366f1" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/@theaccessibleteam/a11y-feedback"><img src="https://img.shields.io/npm/dm/@theaccessibleteam/a11y-feedback.svg?style=flat-square&color=22d3ee" alt="npm downloads"></a>
-  <a href="https://github.com/WOLFIEEEE/npm-extention"><img src="https://img.shields.io/github/stars/WOLFIEEEE/npm-extention?style=flat-square&color=f59e0b" alt="GitHub stars"></a>
-  <a href="https://github.com/WOLFIEEEE/npm-extention/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
+  <a href="https://github.com/WOLFIEEEE/a11y-feedback"><img src="https://img.shields.io/github/stars/WOLFIEEEE/a11y-feedback?style=flat-square&color=f59e0b" alt="GitHub stars"></a>
+  <a href="https://github.com/WOLFIEEEE/a11y-feedback/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
   <a href="https://bundlephobia.com/package/@theaccessibleteam/a11y-feedback"><img src="https://img.shields.io/bundlephobia/minzip/@theaccessibleteam/a11y-feedback?style=flat-square&color=10b981" alt="Bundle size"></a>
   <img src="https://img.shields.io/badge/TypeScript-Ready-3178c6?style=flat-square" alt="TypeScript">
 </p>
 
 <p align="center">
-  <a href="https://wolfieeee.github.io/npm-extention/"><strong>Live Demo</strong></a> · 
+  <a href="https://wolfieeee.github.io/a11y-feedback/"><strong>Live Demo</strong></a> · 
   <a href="#installation">Installation</a> · 
   <a href="#quick-start">Quick Start</a> · 
   <a href="#framework-integration">Frameworks</a> · 
   <a href="#api-reference">API</a> · 
-  <a href="https://github.com/WOLFIEEEE/npm-extention">GitHub</a>
+  <a href="https://github.com/WOLFIEEEE/a11y-feedback">GitHub</a>
 </p>
 
 ---
@@ -739,8 +739,8 @@ We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for deta
 
 ```bash
 # Clone and install
-git clone https://github.com/WOLFIEEEE/npm-extention.git
-cd npm-extention
+git clone https://github.com/WOLFIEEEE/a11y-feedback.git
+cd a11y-feedback
 npm install
 
 # Development

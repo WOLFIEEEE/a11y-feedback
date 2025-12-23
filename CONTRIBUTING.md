@@ -47,8 +47,8 @@ Feature requests are welcome! Please:
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/npm-extention.git
-cd npm-extention
+git clone https://github.com/YOUR_USERNAME/a11y-feedback.git
+cd a11y-feedback
 
 # Install dependencies
 npm install
@@ -204,7 +204,7 @@ When adding features:
 
 ## Questions?
 
-- Open a [discussion](https://github.com/WOLFIEEEE/npm-extention/discussions)
+- Open a [discussion](https://github.com/WOLFIEEEE/a11y-feedback/discussions)
 - Email: theaccessibleteam@gmail.com
 
 Thank you for contributing to making the web more accessible!
