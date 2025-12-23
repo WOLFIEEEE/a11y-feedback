@@ -639,12 +639,12 @@ async function handleSubmit() {
                 <div class="code-header">
                   <span class="code-title">HTML with CDN</span>
                   <button class="copy-btn" data-copy="<!DOCTYPE html>
-<html lang=\"en\">
+<html lang=&quot;en&quot;>
 <head>
-  <script src=\"https://unpkg.com/@theaccessibleteam/a11y-feedback/dist/a11y-feedback.umd.js\"></script>
+  <script src=&quot;https://unpkg.com/@theaccessibleteam/a11y-feedback/dist/a11y-feedback.umd.js&quot;><\/script>
 </head>
 <body>
-  <button id=\"save-btn\">Save</button>
+  <button id=&quot;save-btn&quot;>Save</button>
   
   <script>
     const { notify, configureFeedback } = window.A11yFeedback
@@ -654,7 +654,7 @@ async function handleSubmit() {
     document.getElementById('save-btn').addEventListener('click', () => {
       notify.success('Saved successfully!')
     })
-  </script>
+  <\/script>
 </body>
 </html>" aria-label="Copy code">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -790,8 +790,8 @@ setTimeout(() => {
     </div>
   </footer>
 
-  <!-- Load the library from unpkg CDN (latest version) -->
-  <script src="https://unpkg.com/@theaccessibleteam/a11y-feedback/dist/a11y-feedback.umd.js"></script>
+  <!-- Load the library -->
+  <script src="a11y-feedback.umd.js"></script>
   
   <!-- Demo Script -->
   <script src="demo.js"></script>
